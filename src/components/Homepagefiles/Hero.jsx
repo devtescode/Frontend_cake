@@ -30,7 +30,7 @@ const Hero = () => {
                 {/* Register Button */}
                 <Link
                   to="/register"
-                  className="px-6 py-2 md:px-8 md:py-3 bg-gray-900 hover:bg-gray-700 text-white font-semibold rounded-full shadow-md transition duration-300 text-base md:text-lg"
+                  className="px-6 py-2 md:px-8 md:py-3 bg-pink-600 hover:bg-pink-900 text-white font-semibold rounded-full shadow-md transition duration-300 text-base md:text-lg"
                 >
                   Register
                 </Link>
@@ -38,7 +38,7 @@ const Hero = () => {
                 {/* Login Button */}
                 <Link
                   to="/login"
-                  className="px-6 py-2 md:px-8 md:py-3 border-2 border-gray-600 text-gray-600 hover:bg-gray-600 hover:text-white font-semibold rounded-full shadow-md transition duration-300 text-base md:text-lg"
+                  className="px-6 py-2 md:px-8 md:py-3 border-2 border-pink-600 text-pink-600 hover:bg-pink-600 hover:text-white font-semibold rounded-full shadow-md transition duration-300 text-base md:text-lg"
                 >
                   Login
                 </Link>
