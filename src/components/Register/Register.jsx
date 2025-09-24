@@ -105,10 +105,10 @@ const Register = () => {
     const fullnameValue = watch("fullname");
     const phonenumberValue = watch("phonenumber");
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-white to-pink-50 px-4">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-300 via-white to-pink-50 px-2">
             <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
                 {/* Title */}
-                <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-600 mb-2">
+                <h2 className="text-2xl md:text-3xl font-bold text-center text-pink-600 mb-2">
                     Register
                 </h2>
                 <p className="text-center text-gray-500 mb-6">
@@ -258,7 +258,7 @@ const Register = () => {
                     <div className="text-center">
                         <button
                             type="submit"
-                            className="w-50 bg-gray-600 text-white py-2 rounded-lg font-semibold hover:bg-gray-700 transition duration-300"
+                            className="w-50 bg-pink-600 text-white py-2 rounded-lg font-semibold hover:bg-pink-700 transition duration-300"
                         >
                             Sign Up
                         </button>
