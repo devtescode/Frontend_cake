@@ -3,6 +3,7 @@ import './App.css'
 import Homepagecakes from './components/Homefolder/Homepagecakes'
 import Register from './components/Register/Register'
 import Login from './components/Login/Login'
+import Userdashboard from './components/Dashboard/Userdashboard'
 
 function App() {
 
@@ -12,6 +13,7 @@ function App() {
       <Route path='/' element={<Homepagecakes/>}/>
       <Route path='/register' element={<Register/>}/>
       <Route path='/login' element={<Login/>}/>
+      <Route path='/userdashboard' element={<Userdashboard/>}/>
     </Routes>
     </>
   )
