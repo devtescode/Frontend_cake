@@ -63,12 +63,12 @@ const Register = () => {
                 setErrorMessage("");
             }, 10000);
 
-            return () => clearTimeout(timer); // cleanup
+            return () => clearTimeout(timer); 
         }
     }, [errorMessage]);
     const onSubmit = async (data) => {
         try {
-            setErrorMessage(""); // clear previous errors
+            setErrorMessage(""); 
             const res = await axios.post("http://localhost:4500/usercake/register", data);
             // console.log("✅ Signup success:", res.data);
             const Toast = Swal.mixin({
