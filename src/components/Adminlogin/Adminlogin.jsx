@@ -228,8 +228,7 @@ const Adminlogin = () => {
                     {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
                 </div>
 
-                {/* Password Input */}
-                {/* Password Input */}
+                
                 <div className="mb-6 relative">
                     <label className="block text-sm font-medium text-gray-600 mb-1">Password</label>
                     <div
