@@ -38,9 +38,11 @@ const Login = () => {
     }
   }, [errorMessage]);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const onSubmit = async (data) => {
     try {
       setErrorMessage(""); // clear previous errors
+      setLoading(true);
       const res = await axios.post("http://localhost:4500/usercake/login", data);
 
       // ✅ check the response message
@@ -62,9 +64,8 @@ const Login = () => {
           title: res.data.message
         });
 
-        // ✅ Save token for later use
         localStorage.setItem("token", res.data.token);
-
+        localStorage.setItem("UserData", JSON.stringify(res.data.user));
         navigate("/userdashboard");
       } else {
         setErrorMessage(res.data?.message || "Unexpected response from server");
@@ -76,6 +77,9 @@ const Login = () => {
       } else {
         setErrorMessage("Something went wrong. Please try again.");
       }
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -160,14 +164,43 @@ const Login = () => {
           </div>
 
           {/* Submit */}
-          <div className="text-center">
+          <div className="flex justify-center">
             <button
               type="submit"
-              className="w-50 bg-pink-600 text-white py-2 rounded-lg font-semibold hover:bg-pink-700 transition duration-300"
+              disabled={loading}
+              className={`w-40 flex items-center justify-center gap-2 bg-pink-600 text-white py-2 rounded-lg font-semibold transition duration-300 ${loading ? "opacity-70 cursor-not-allowed" : "hover:bg-pink-700"
+                }`}
             >
-              Login
+              {loading ? (
+                <>
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                  <span>Logging in...</span>
+                </>
+              ) : (
+                "Login"
+              )}
             </button>
           </div>
+
         </form>
 
         {/* Footer */}
