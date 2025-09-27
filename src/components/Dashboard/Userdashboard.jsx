@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import OverviewPage from './OverviewPage';
 import ProfilePage from './ProfilePage';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // Import all page components
 // import OverviewPage from './pages/OverviewPage';
@@ -132,6 +132,16 @@ const Userdashboard = () => {
 
   // const user = JSON.parse(localStorage.getItem("user"));
 
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("UserData");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+  const navigate = useNavigate()
+
   if (!isScreenChecked) return null;
   return (
     <div className="min-h-screen bg-gray-50 flex relative">
@@ -164,13 +174,16 @@ const Userdashboard = () => {
           <div className="flex items-center justify-between">
             {(isSidebarExpanded || isMobile) && (
               <div className="flex items-center space-x-3">
-                <img
+                {/* <img
                   src="/api/placeholder/40/40"
                   alt="Profile"
                   className="w-10 h-10 rounded-full object-cover"
-                />
+                /> */}
+                <div className="w-10 h-10 bg-pink-600 text-white rounded-full flex items-center justify-center font-bold">
+                  {user?.fullname ? user.fullname.charAt(0).toUpperCase() : "?"}
+                </div>
                 <div>
-                  <h3 className="font-semibold text-gray-800 text-sm">Sarah Johnson</h3>
+                  <h3 className="font-semibold text-gray-800 text-sm">{user?.fullname || "Guest User"}</h3>
                   <p className="text-xs text-gray-600">Welcome back!</p>
                 </div>
               </div>
@@ -234,18 +247,24 @@ const Userdashboard = () => {
 
         {/* Logout Button */}
         <div className="absolute bottom-4 left-2 right-2">
-          <Link to="/login" className="font-medium hover:text-primary-dark transition-colors">
-            <button className={` w-full flex items-center space-x-3 px-3 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors group ${!isSidebarExpanded && !isMobile ? 'justify-center' : ''}`}>
-              <LogOut className="h-5 w-5 flex-shrink-0" />
-              {(isSidebarExpanded || isMobile) && <span className="text-sm">Logout</span>}
+          {/* <Link to="/login" className="font-medium hover:text-primary-dark transition-colors"> */}
+          <button
+            onClick={() => {
+              localStorage.removeItem("token");
+              localStorage.removeItem("UserData");
+              navigate("/login");
+            }}
+            className={` w-full flex items-center space-x-3 px-3 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors group ${!isSidebarExpanded && !isMobile ? 'justify-center' : ''}`}>
+            <LogOut className="h-5 w-5 flex-shrink-0" />
+            {(isSidebarExpanded || isMobile) && <span className="text-sm">Logout</span>}
 
-              {!isSidebarExpanded && !isMobile && (
-                <div className="absolute left-16 bg-gray-800 text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
-                  Logout
-                </div>
-              )}
-            </button>
-          </Link>
+            {!isSidebarExpanded && !isMobile && (
+              <div className="absolute left-16 bg-gray-800 text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
+                Logout
+              </div>
+            )}
+          </button>
+          {/* </Link> */}
         </div>
       </motion.div>
 

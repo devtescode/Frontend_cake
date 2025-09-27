@@ -63,12 +63,14 @@ const Register = () => {
                 setErrorMessage("");
             }, 10000);
 
-            return () => clearTimeout(timer); 
+            return () => clearTimeout(timer);
         }
     }, [errorMessage]);
+    const [loading, setLoading] = useState(false);
     const onSubmit = async (data) => {
         try {
-            setErrorMessage(""); 
+            setErrorMessage("");
+            setLoading(true);
             const res = await axios.post("http://localhost:4500/usercake/register", data);
             // console.log("✅ Signup success:", res.data);
             const Toast = Swal.mixin({
@@ -97,6 +99,9 @@ const Register = () => {
                 setErrorMessage("Something went wrong. Please try again.");
             }
         }
+        finally {
+            setLoading(false);
+        }
     };
 
     // watch fields
@@ -109,7 +114,7 @@ const Register = () => {
             <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
                 {/* Title */}
                 <h2 className="text-2xl md:text-3xl font-bold text-center text-pink-600 mb-2">
-                    Register
+                    Sign-Up
                 </h2>
                 <p className="text-center text-gray-500 mb-6">
                     Join us and enjoy the sweetest experience 🎂
@@ -255,13 +260,41 @@ const Register = () => {
                         />
                     </div> */}
 
-                    <div className="text-center">
-                        <button
-                            type="submit"
-                            className="w-50 bg-pink-600 text-white py-2 rounded-lg font-semibold hover:bg-pink-700 transition duration-300"
-                        >
-                            Sign Up
-                        </button>
+                   <div className="flex justify-center">
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-40 flex items-center justify-center gap-2 bg-pink-600 text-white py-2 rounded-lg font-semibold transition duration-300 ${loading ? "opacity-70 cursor-not-allowed" : "hover:bg-pink-700"
+                }`}
+            >
+              {loading ? (
+                <>
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                  <span>Sign-Up...</span>
+                </>
+              ) : (
+                "Sign-Up"
+              )}
+            </button>
                     </div>
                 </form>
 
