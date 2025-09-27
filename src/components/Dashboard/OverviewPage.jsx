@@ -12,7 +12,7 @@ const OverviewPage = () => {
   const recentOrders = [
     {
       id: 1,
-      cakeImage: '/api/placeholder/80/80',
+      cakeImage: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1789&q=80',
       name: 'Chocolate Birthday Cake',
       price: 45.99,
       status: 'Delivered',
@@ -21,7 +21,7 @@ const OverviewPage = () => {
     },
     {
       id: 2,
-      cakeImage: '/api/placeholder/80/80',
+      cakeImage: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1789&q=80',
       name: 'Vanilla Wedding Cake',
       price: 125.00,
       status: 'Processing',
