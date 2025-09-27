@@ -46,9 +46,8 @@ const OverviewPage = () => {
         <p className="text-gray-600 mt-1">Welcome back! Here's what's happening with your orders.</p>
       </div>
       
-      {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-        <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-4 md:p-6 text-white">
+        <div className="bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl p-4 md:p-6 text-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-blue-100 text-sm">Total Orders</p>
@@ -58,7 +57,7 @@ const OverviewPage = () => {
           </div>
         </div>
         
-        <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-xl p-4 md:p-6 text-white">
+        <div className="bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl p-4 md:p-6 text-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-green-100 text-sm">Total Spent</p>
@@ -68,7 +67,7 @@ const OverviewPage = () => {
           </div>
         </div>
         
-        <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl p-4 md:p-6 text-white">
+        <div className="bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl p-4 md:p-6 text-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-orange-100 text-sm">Active Orders</p>
@@ -89,7 +88,6 @@ const OverviewPage = () => {
         </div>
       </div>
 
-      {/* Recent Orders */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg md:text-xl font-semibold text-gray-800">Recent Orders</h2>
@@ -123,7 +121,6 @@ const OverviewPage = () => {
         </div>
       </div>
 
-      {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
           <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
