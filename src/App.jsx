@@ -7,6 +7,7 @@ import Userdashboard from './components/Dashboard/Userdashboard'
 import Adminlogin from './components/Adminlogin/Adminlogin'
 import Notfound from './components/Notfound/Notfound'
 import ProtectedRoute from './components/UserProtectedRoute/ProtectedRoute'
+import Admindashboard from './components/Admindashboard/Admindashboard'
 
 function App() {
 
@@ -26,6 +27,8 @@ function App() {
           }
         />
         <Route path='/adlogin' element={<Adminlogin />} />
+        <Route path='/admindashboard' element={<Admindashboard />} />
+        
         <Route path='*' element={<Notfound />} />
       </Routes>
     </>
