@@ -1,37 +1,12 @@
 // pages/CakesManagement.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import { motion } from 'framer-motion';
 import Modal from '../Modal';
 import CakeForm from '../CakeForm';
 
 const CakesManagement = () => {
-  const [cakes, setCakes] = useState([
-    {
-      id: 1,
-      name: 'Chocolate Delight',
-      price: '₦15,000',
-      category: 'Chocolate',
-      image: 'https://via.placeholder.com/60x60',
-      description: 'Rich chocolate cake with cream frosting'
-    },
-    {
-      id: 2,
-      name: 'Vanilla Dream',
-      price: '₦12,000',
-      category: 'Vanilla',
-      image: 'https://via.placeholder.com/60x60',
-      description: 'Classic vanilla cake with buttercream'
-    },
-    {
-      id: 3,
-      name: 'Red Velvet',
-      price: '₦18,000',
-      category: 'Special',
-      image: 'https://via.placeholder.com/60x60',
-      description: 'Luxurious red velvet with cream cheese frosting'
-    },
-  ]);
-
+  const [cakes, setCakes] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCake, setEditingCake] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -39,34 +14,51 @@ const CakesManagement = () => {
 
   const categories = ['All', 'Chocolate', 'Vanilla', 'Special', 'Birthday'];
 
+  // ✅ Fetch cakes from backend once component loads
+  useEffect(() => {
+    fetchCakes();
+  }, []);
+
+  const fetchCakes = async () => {
+    try {
+      const res = await axios.get("http://localhost:4500/admin/admingetplan");
+      setCakes(res.data.plans); // ✅ make sure your backend response is {plans: []}
+    } catch (error) {
+      console.log("Failed to fetch cakes:", error);
+    }
+  };
+
   const filteredCakes = cakes.filter(cake => {
     const matchesSearch = cake.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'All' || cake.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
+  // ✅ OPEN ADD MODAL
   const handleAddCake = () => {
     setEditingCake(null);
     setIsModalOpen(true);
   };
 
+  // ✅ OPEN EDIT MODAL
   const handleEditCake = (cake) => {
     setEditingCake(cake);
     setIsModalOpen(true);
   };
 
-  const handleDeleteCake = (id) => {
-    setCakes(cakes.filter(cake => cake.id !== id));
+  // ✅ DELETE FROM BACKEND
+  const handleDeleteCake = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/cakes/delete/${id}`);
+      fetchCakes(); // refresh after delete
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleSaveCake = (cakeData) => {
-    if (editingCake) {
-      setCakes(cakes.map(cake => 
-        cake.id === editingCake.id ? { ...cake, ...cakeData } : cake
-      ));
-    } else {
-      setCakes([...cakes, { ...cakeData, id: Date.now() }]);
-    }
+  // ✅ AFTER SAVE (ADD OR EDIT)
+  const handleSaveCake = () => {
+    fetchCakes(); 
     setIsModalOpen(false);
   };
 
@@ -111,43 +103,29 @@ const CakesManagement = () => {
       </div>
 
       {/* Cakes Table */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <div className="rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Image
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Name
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Price
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Category
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredCakes.map((cake, index) => (
+              {filteredCakes?.map((cake, index) => (
                 <motion.tr
-                  key={cake.id}
+                  key={cake._id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   className="hover:bg-gray-50"
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <img
-                      src={cake.image}
-                      alt={cake.name}
-                      className="w-12 h-12 rounded-lg object-cover"
-                    />
+                    <img src={cake.image} alt={cake.name} className="w-12 h-12 rounded-lg object-cover" />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
@@ -155,27 +133,15 @@ const CakesManagement = () => {
                       <div className="text-sm text-gray-500">{cake.description}</div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {cake.price}
-                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{cake.price}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-pink-100 text-pink-800">
                       {cake.category}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                    <button
-                      onClick={() => handleEditCake(cake)}
-                      className="text-indigo-600 hover:text-indigo-900"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteCake(cake.id)}
-                      className="text-red-600 hover:text-red-900"
-                    >
-                      Delete
-                    </button>
+                    <button onClick={() => handleEditCake(cake)} className="text-indigo-600 hover:text-indigo-900">Edit</button>
+                    <button onClick={() => handleDeleteCake(cake._id)} className="text-red-600 hover:text-red-900">Delete</button>
                   </td>
                 </motion.tr>
               ))}

@@ -273,7 +273,7 @@ const Admindashboard = () => {
                         onClick={() => {
                             localStorage.removeItem("token");
                             localStorage.removeItem("UserData");
-                            navigate("/login");
+                            navigate("/adlogin");
                         }}
                         className={` w-full flex items-center space-x-3 px-3 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors group ${!isSidebarExpanded && !isMobile ? 'justify-center' : ''}`}>
                         <LogOut className="h-5 w-5 flex-shrink-0" />
