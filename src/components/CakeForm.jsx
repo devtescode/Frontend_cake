@@ -9,7 +9,7 @@ const CakeForm = ({ onCancel }) => {
     description: '',
   });
   const [image, setImage] = useState(null);
-
+  const [loading, setLoading] = useState(false);
 
   // Handle text inputs
   const handleChange = (e) => {
@@ -34,14 +34,16 @@ const CakeForm = ({ onCancel }) => {
     data.append("category", formData.category);
     data.append("description", formData.description);
     data.append("image", image);
+
     try {
+      setLoading(true);
       await axios.post("http://localhost:4500/admin/admincreateplan", data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      // alert("Cake added successfully!");
+      // ✅ Toast message
       const Toast = Swal.mixin({
         toast: true,
         position: "top-end",
@@ -58,12 +60,22 @@ const CakeForm = ({ onCancel }) => {
         icon: "success",
         title: "Cake added successfully!"
       });
-      onclose()
+
+      // ✅ Close modal after success
+      onCancel();
+
     } catch (error) {
       console.error(error);
-      alert("Error uploading cake");
+      Swal.fire({
+        icon: "error",
+        title: "Upload failed",
+        text: error.response?.data?.message || "Error uploading cake",
+      });
+    } finally {
+      setLoading(false);
     }
   };
+
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -166,12 +178,48 @@ const CakeForm = ({ onCancel }) => {
         >
           Cancel
         </button>
-        <button
+        {/* <button
           type="submit"
           className="px-4 py-2 text-sm font-medium text-white bg-pink-500 rounded-lg hover:bg-pink-600"
         >
           Add Cake
-        </button>
+        </button> */}
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-40 flex items-center justify-center gap-2 bg-pink-600 text-white py-2 rounded-lg font-semibold transition duration-300 ${loading ? "opacity-70 cursor-not-allowed" : "hover:bg-pink-700"
+              }`}
+          >
+            {loading ? (
+              <>
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
+                </svg>
+                <span>Add Cake...</span>
+              </>
+            ) : (
+              "Add Cake"
+            )}
+          </button>
+        </div>
       </div>
     </form>
   );

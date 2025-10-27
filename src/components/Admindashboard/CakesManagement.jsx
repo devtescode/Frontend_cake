@@ -49,7 +49,7 @@ const CakesManagement = () => {
   // ✅ DELETE FROM BACKEND
   const handleDeleteCake = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/cakes/delete/${id}`);
+      await axios.delete(`http://localhost:4500/admin/admindelete/${id}`);
       fetchCakes(); // refresh after delete
     } catch (error) {
       console.log(error);
@@ -58,7 +58,7 @@ const CakesManagement = () => {
 
   // ✅ AFTER SAVE (ADD OR EDIT)
   const handleSaveCake = () => {
-    fetchCakes(); 
+    fetchCakes();
     setIsModalOpen(false);
   };
 
