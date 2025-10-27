@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from "axios";
 
-const CakeForm = ({ onCancel }) => {
+const CakeForm = ({ onCancel, onSave  }) => {
   const [formData, setFormData] = useState({
     name: '',
     price: '',
@@ -42,6 +42,7 @@ const CakeForm = ({ onCancel }) => {
           "Content-Type": "multipart/form-data",
         },
       });
+      
 
       // ✅ Toast message
       const Toast = Swal.mixin({
@@ -62,6 +63,7 @@ const CakeForm = ({ onCancel }) => {
       });
 
       // ✅ Close modal after success
+        if (onSave) onSave();
       onCancel();
 
     } catch (error) {
