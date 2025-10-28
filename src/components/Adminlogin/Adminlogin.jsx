@@ -128,25 +128,34 @@ const Adminlogin = () => {
         } catch (err) {
             // Swal.fire("Error", err.response?.data?.message || "Something went wrong", "error");
             const Toast = Swal.mixin({
-                    toast: true,
-                    position: "top-end",
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.onmouseenter = Swal.stopTimer;
-                        toast.onmouseleave = Swal.resumeTimer;
-                    }
-                });
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
 
-                Toast.fire({
-                    icon: "warning",
-                    title: err.response?.data?.message
-                });
+            Toast.fire({
+                icon: "warning",
+                title: err.response?.data?.message
+            });
         }
     };
 
-    if (adminExists === null) return <p>Loading...</p>;
+    if (adminExists === null) {
+        return (
+            <div className="flex justify-center items-center h-screen space-x-2">
+                <div className="w-3 h-3 bg-pink-500 rounded-full animate-bounce"></div>
+                <div className="w-3 h-3 bg-pink-500 rounded-full animate-bounce [animation-delay:-.3s]"></div>
+                <div className="w-3 h-3 bg-pink-500 rounded-full animate-bounce [animation-delay:-.5s]"></div>
+            </div>
+        );
+    }
+
 
     return (
         <div className="px-2 flex justify-center items-center h-screen bg-gradient-to-r from-pink-200 to-blue-100">
@@ -228,7 +237,7 @@ const Adminlogin = () => {
                     {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
                 </div>
 
-                
+
                 <div className="mb-6 relative">
                     <label className="block text-sm font-medium text-gray-600 mb-1">Password</label>
                     <div

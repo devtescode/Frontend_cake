@@ -171,7 +171,7 @@ const Admindashboard = () => {
                         animate="open"
                         exit="closed"
                         variants={overlayVariants}
-                        className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                        className="fixed inset-0 bg-opacity-50 z-40 bg-black/40 backdrop-blur-sm"
                         onClick={closeSidebar}
                     />
                 )}
