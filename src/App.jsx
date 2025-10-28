@@ -8,6 +8,7 @@ import Adminlogin from './components/Adminlogin/Adminlogin'
 import Notfound from './components/Notfound/Notfound'
 import ProtectedRoute from './components/UserProtectedRoute/ProtectedRoute'
 import Admindashboard from './components/Admindashboard/Admindashboard'
+import Viewscake from './components/Dashboard/Viewscake'
 
 function App() {
 
@@ -18,17 +19,22 @@ function App() {
         <Route path='/register' element={<Register />} />
         <Route path='/login' element={<Login />} />
         {/* <Route path='/userdashboard' element={<Userdashboard/>}/> */}
+        {/* <Route path='/viewscakes/:id' element={<Viewscake />} /> */}
+
         <Route
           path="/userdashboard"
           element={
-            <ProtectedRoute> 
+            <ProtectedRoute>
               <Userdashboard />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route path="viewscake/:id" element={<Viewscake />} />
+        </Route>
+
         <Route path='/adlogin' element={<Adminlogin />} />
         <Route path='/admindashboard' element={<Admindashboard />} />
-        
+
         <Route path='*' element={<Notfound />} />
       </Routes>
     </>

@@ -19,19 +19,10 @@ import {
 } from 'lucide-react';
 import OverviewPage from './OverviewPage';
 import ProfilePage from './ProfilePage';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import Cakespage from './Cakespage';
-
-// Import all page components
-// import OverviewPage from './pages/OverviewPage';
-// import ProfilePage from './pages/ProfilePage';
-// import OrdersPage from './pages/OrdersPage';
-// import PaymentsPage from './pages/PaymentsPage';
-// import FavoritesPage from './pages/FavoritesPage';
-// import ReviewsPage from './pages/ReviewsPage';
-// import NotificationsPage from './pages/NotificationsPage';
-// import DeliveryPage from './pages/DeliveryPage';
-// import SettingsPage from './pages/SettingsPage';
+import Viewscake from './Viewscake';
+// import Viewscake from './Viewscake';
 
 const Userdashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -39,6 +30,20 @@ const Userdashboard = () => {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [isScreenChecked, setIsScreenChecked] = useState(false);
+  const { id } = useParams();
+
+
+
+
+const location = useLocation();
+
+useEffect(() => {
+  if (location.pathname.includes("/userdashboard/viewscake")) {
+    setActiveTab("viewscake");
+  }
+}, [location]);
+
+
 
   // Check screen size
   useEffect(() => {
@@ -119,14 +124,9 @@ const Userdashboard = () => {
     switch (activeTab) {
       case 'overview': return <OverviewPage />;
       case 'profile': return <ProfilePage />;
-        case 'cakes': return <Cakespage />;
-      //   case 'payments': return <PaymentsPage />;
-      //   case 'favorites': return <FavoritesPage />;
-      //   case 'reviews': return <ReviewsPage />;
-      //   case 'notifications': return <NotificationsPage />;
-      //   case 'delivery': return <DeliveryPage />;
-      //   case 'settings': return <SettingsPage />;
-      //   default: return <OverviewPage />;
+      case 'cakes': return <Cakespage />;
+      case 'viewscake': return <Viewscake />;
+
     }
   };
 
@@ -159,7 +159,6 @@ const Userdashboard = () => {
         )}
       </AnimatePresence>
 
-      {/* Sidebar */}
       <motion.div
         initial={isMobile ? "closed" : "open"}
         animate={isMobile ? (isSidebarOpen ? "open" : "closed") : "open"}
@@ -169,16 +168,11 @@ const Userdashboard = () => {
           } bg-white shadow-lg z-50 transition-all duration-300 ${isMobile ? 'w-64 h-full' : ''
           }`}
       >
-        {/* Sidebar Header */}
         <div className={`p-4 border-b border-gray-200 ${!isSidebarExpanded && !isMobile ? 'px-2' : ''}`}>
           <div className="flex items-center justify-between">
             {(isSidebarExpanded || isMobile) && (
               <div className="flex items-center space-x-3">
-                {/* <img
-                  src="/api/placeholder/40/40"
-                  alt="Profile"
-                  className="w-10 h-10 rounded-full object-cover"
-                /> */}
+               
                 <div className="w-10 h-10 bg-pink-600 text-white rounded-full flex items-center justify-center font-bold">
                   {user?.fullname ? user.fullname.charAt(0).toUpperCase() : "?"}
                 </div>
@@ -212,7 +206,6 @@ const Userdashboard = () => {
           </div>
         </div>
 
-        {/* Navigation */}
         <nav className="p-2">
           <ul className="space-y-1">
             {sidebarItems.map(item => {
@@ -232,7 +225,6 @@ const Userdashboard = () => {
                     <Icon className="h-5 w-5 flex-shrink-0" />
                     {(isSidebarExpanded || isMobile) && <span className="text-sm">{item.label}</span>}
 
-                    {/* Tooltip for collapsed sidebar */}
                     {!isSidebarExpanded && !isMobile && (
                       <div className="absolute left-16 bg-gray-800 text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
                         {item.label}
@@ -245,9 +237,7 @@ const Userdashboard = () => {
           </ul>
         </nav>
 
-        {/* Logout Button */}
         <div className="absolute bottom-4 left-2 right-2">
-          {/* <Link to="/login" className="font-medium hover:text-primary-dark transition-colors"> */}
           <button
             onClick={() => {
               localStorage.removeItem("token");
@@ -264,13 +254,10 @@ const Userdashboard = () => {
               </div>
             )}
           </button>
-          {/* </Link> */}
         </div>
       </motion.div>
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col min-h-screen">
-        {/* Top Bar */}
         <div className="bg-white shadow-sm border-b border-gray-200 p-4 flex items-center justify-between">
           <button
             onClick={toggleSidebar}
@@ -287,7 +274,6 @@ const Userdashboard = () => {
           </div>
         </div>
 
-        {/* Page Content */}
         <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto">
           <motion.div
             key={activeTab}
@@ -305,6 +291,3 @@ const Userdashboard = () => {
 };
 
 export default Userdashboard;
-
-
-

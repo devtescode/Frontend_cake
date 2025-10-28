@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Cakespage = () => {
     const [cakes, setCakes] = useState([]);
@@ -9,6 +10,8 @@ const Cakespage = () => {
         const fetchCakes = async () => {
             try {
                 const res = await axios.get("http://localhost:4500/admin/admingetplan");
+                // console.log(res, "get responde");
+
                 setCakes(res.data.plans);
             } catch (error) {
                 console.log("Error fetching cakes", error);
@@ -51,6 +54,17 @@ const Cakespage = () => {
         return oldPrice;
     };
 
+    const navigate = useNavigate();
+
+    // const handleViewCake = (cake) => {
+    //     navigate(`/viewscakes/${cake._id}`);
+    //     console.log(cake, "our cakes");
+
+    // };
+
+
+
+
 
 
 
@@ -90,16 +104,33 @@ const Cakespage = () => {
                                     <p className="text-gray-400 line-through text-sm">
                                         ₦ {Number(oldPrice).toLocaleString()}
                                     </p>
-
                                 </div>
+
+                                {/* ✅ View to Add button */}
+                                {/* <button
+                                    onClick={() => handleViewCake(cake)}
+                                    className="mt-3 w-full bg-pink-500 text-white py-2 rounded-lg text-sm hover:bg-pink-600 transition-colors"
+                                >
+                                    View to Add
+                                </button> */}
+
+
+                                <button
+                                    onClick={() => {
+                                        navigate(`/userdashboard/viewscake/${cake._id}`)
+                                    }}
+                                    className="mt-3 bg-pink-500 text-white px-3 py-2 rounded-lg text-sm">
+                                    View to Add
+                                </button>
+
+
                             </div>
                         );
                     })}
-
-
                 </div>
             )}
         </div>
+
     );
 };
 
