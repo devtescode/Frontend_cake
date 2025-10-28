@@ -20,6 +20,7 @@ import {
 import OverviewPage from './OverviewPage';
 import ProfilePage from './ProfilePage';
 import { Link, useNavigate } from 'react-router-dom';
+import Cakespage from './Cakespage';
 
 // Import all page components
 // import OverviewPage from './pages/OverviewPage';
@@ -59,7 +60,7 @@ const Userdashboard = () => {
   const sidebarItems = [
     { id: 'overview', label: 'Dashboard', icon: Package },
     { id: 'profile', label: 'Profile', icon: User },
-    { id: 'orders', label: 'My Orders', icon: ShoppingBag },
+    { id: 'cakes', label: 'Cakes', icon: ShoppingBag },
     { id: 'payments', label: 'Payments', icon: CreditCard },
     { id: 'favorites', label: 'Favorites', icon: Heart },
     { id: 'reviews', label: 'Reviews', icon: MessageSquare },
@@ -118,7 +119,7 @@ const Userdashboard = () => {
     switch (activeTab) {
       case 'overview': return <OverviewPage />;
       case 'profile': return <ProfilePage />;
-      //   case 'orders': return <OrdersPage />;
+        case 'cakes': return <Cakespage />;
       //   case 'payments': return <PaymentsPage />;
       //   case 'favorites': return <FavoritesPage />;
       //   case 'reviews': return <ReviewsPage />;
@@ -145,7 +146,6 @@ const Userdashboard = () => {
   if (!isScreenChecked) return null;
   return (
     <div className="min-h-screen bg-gray-50 flex relative">
-      {/* Mobile Overlay */}
       <AnimatePresence>
         {isMobile && isSidebarOpen && (
           <motion.div
@@ -153,7 +153,7 @@ const Userdashboard = () => {
             animate="open"
             exit="closed"
             variants={overlayVariants}
-            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            className="fixed bg-black/40 backdrop-blur-sm  inset-0 bg-opacity-50 z-40"
             onClick={closeSidebar}
           />
         )}

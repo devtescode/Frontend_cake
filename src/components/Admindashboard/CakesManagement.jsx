@@ -54,8 +54,8 @@ const CakesManagement = () => {
       text: "This cake will be permanently deleted!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "#f6339a",
+      cancelButtonColor: "#477ffc",
       confirmButtonText: "Yes, delete it!",
       cancelButtonText: "No, cancel"
     }).then(async (result) => {
