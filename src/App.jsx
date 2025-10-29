@@ -9,6 +9,9 @@ import Notfound from './components/Notfound/Notfound'
 import ProtectedRoute from './components/UserProtectedRoute/ProtectedRoute'
 import Admindashboard from './components/Admindashboard/Admindashboard'
 import Viewscake from './components/Dashboard/Viewscake'
+import Cakespage from './components/Dashboard/Cakespage'
+import ProfilePage from './components/Dashboard/ProfilePage'
+import OverviewPage from './components/Dashboard/OverviewPage'
 
 function App() {
 
@@ -27,6 +30,9 @@ function App() {
             </ProtectedRoute>
           }
         >
+          <Route index element={<OverviewPage />} />
+          <Route path="profile" element={<ProfilePage />} />
+          <Route path="cakes" element={<Cakespage />} />
           <Route path="viewscake/:id" element={<Viewscake />} />
         </Route>
 

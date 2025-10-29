@@ -209,6 +209,7 @@ const Userdashboard = () => {
                 <li key={item.id}>
                   <button
                     onClick={() => {
+                      navigate(`/userdashboard/${item.id === 'overview' ? '' : item.id}`);
                       setActiveTab(item.id);
                       if (isMobile) closeSidebar();
                     }}
