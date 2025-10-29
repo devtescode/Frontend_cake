@@ -45,33 +45,7 @@ const Viewscake = () => {
 
   return (
     <>
-      {/* <div className="max-w-3xl mx-auto px-4 py-6">
-      <img
-        src={cake.image}
-        alt={cake.name}
-        className="w-full h-80 object-cover rounded-lg"
-      />
-
-      <h2 className="text-2xl font-bold mt-4">{cake.name}</h2>
-
-      <p className="text-gray-600 mt-2">{cake.description}</p>
-
-      <div className="flex items-center gap-3 mt-3">
-        <p className="text-pink-500 font-bold text-xl">
-          ₦ {Number(cake.price).toLocaleString()}
-        </p>
-        <p className="line-through text-gray-400">
-          ₦ {(Number(cake.price) + 5000).toLocaleString()}
-        </p>
-      </div>
-
-      <button className="mt-6 bg-pink-500 text-white px-5 py-2 rounded-lg hover:bg-pink-600 transition-colors">
-        Add to Cart
-      </button>
-    </div> */}
-
-
-      <div className="min-h-screen bg-gray-50 bg-white">
+      <div className="min-h-screen bg-white">
         {/* Main Container */}
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

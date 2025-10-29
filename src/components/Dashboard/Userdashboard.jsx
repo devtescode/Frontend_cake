@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import OverviewPage from './OverviewPage';
 import ProfilePage from './ProfilePage';
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import Cakespage from './Cakespage';
 import Viewscake from './Viewscake';
 // import Viewscake from './Viewscake';
@@ -31,17 +31,12 @@ const Userdashboard = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isScreenChecked, setIsScreenChecked] = useState(false);
   const { id } = useParams();
-
-
-
-
-const location = useLocation();
-
-useEffect(() => {
-  if (location.pathname.includes("/userdashboard/viewscake")) {
-    setActiveTab("viewscake");
-  }
-}, [location]);
+  const location = useLocation();
+  // useEffect(() => {
+  //   if (location.pathname.includes("/userdashboard/viewscake")) {
+  //     setActiveTab("viewscake");
+  //   }
+  // }, [location]);
 
 
 
@@ -172,7 +167,7 @@ useEffect(() => {
           <div className="flex items-center justify-between">
             {(isSidebarExpanded || isMobile) && (
               <div className="flex items-center space-x-3">
-               
+
                 <div className="w-10 h-10 bg-pink-600 text-white rounded-full flex items-center justify-center font-bold">
                   {user?.fullname ? user.fullname.charAt(0).toUpperCase() : "?"}
                 </div>
@@ -274,7 +269,7 @@ useEffect(() => {
           </div>
         </div>
 
-        <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto">
+        {/* <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto">
           <motion.div
             key={activeTab}
             initial={{ opacity: 0, y: 20 }}
@@ -284,7 +279,23 @@ useEffect(() => {
           >
             {renderPage()}
           </motion.div>
+        </div> */}
+        <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto">
+          {location.pathname.includes("/userdashboard/viewscake") ? (
+            <Outlet />
+          ) : (
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              {renderPage()}
+            </motion.div>
+          )}
         </div>
+
       </div>
     </div>
   );
