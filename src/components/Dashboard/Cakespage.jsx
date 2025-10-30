@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaSpinner } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+import { div } from "framer-motion/client";
 
 const Cakespage = () => {
     const [cakes, setCakes] = useState([]);
@@ -64,9 +65,14 @@ const Cakespage = () => {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-[60vh] text-lg font-medium text-gray-600">
-                Loading cakes...
+            // <div className="flex justify-center items-center h-[60vh] text-lg font-medium text-gray-600">
+            //     Loading cakes...
+            // </div>
+        
+            <div className=" py-20 flex justify-center items-center h-[60vh] text-lg font-medium text-gray-600">
+                <FaSpinner className="animate-spin text-4xl text-pink-500" />
             </div>
+            
         );
     }
 
@@ -148,8 +154,9 @@ const Cakespage = () => {
                             <img
                                 src={selectedCake.image}
                                 alt={selectedCake.name}
-                                className="w-full h-52 object-cover rounded-lg mb-4 mt-7"
+                                className="w-full h-64 object-contain rounded-xl mb-4 mt-7 bg-white-100 p-2"
                             />
+
 
                             {/* Cake Info */}
                             <h2 className="text-xl font-semibold text-gray-800">

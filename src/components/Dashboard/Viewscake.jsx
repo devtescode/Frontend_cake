@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Heart, ShoppingCart, Star, Truck, RotateCcw } from "lucide-react"
 import logo from '../../assets/logo.png'
+import { FaSpinner } from "react-icons/fa";
 
 const Viewscake = () => {
   const { id } = useParams();
@@ -33,8 +34,8 @@ const Viewscake = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center mt-20">
-        <p className="text-gray-500">Loading...</p>
+      <div className=" py-20 flex justify-center items-center h-[60vh] text-lg font-medium text-gray-600">
+        <FaSpinner className="animate-spin text-4xl text-pink-500" />
       </div>
     );
   }
