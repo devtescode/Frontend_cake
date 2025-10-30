@@ -89,8 +89,6 @@ const CakesManagement = () => {
             Add New Cake
           </button>
         </div>
-
-      {/* Filters */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
             <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-2 sm:space-y-0">
@@ -117,7 +115,6 @@ const CakesManagement = () => {
         </div>
       </div>
 
-      {/* Cakes Table */}
       <div className="rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           {loading ? (
@@ -200,7 +197,6 @@ const CakesManagement = () => {
         </div>
       </div>
 
-      {/* Add/Edit Cake Modal */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -215,5 +211,4 @@ const CakesManagement = () => {
     </div>
   );
 };
-
 export default CakesManagement;

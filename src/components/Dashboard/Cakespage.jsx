@@ -23,36 +23,48 @@ const Cakespage = () => {
         fetchCakes();
     }, []);
 
-    const getOldPrice = (cakeId, currentPrice) => {
-        const savedOldPrices = JSON.parse(localStorage.getItem("oldPrices") || "{}");
-
-        if (savedOldPrices[cakeId]) {
-            return savedOldPrices[cakeId];
-        }
-
+    // ✅ Helper: generate old price randomly within range
+    const generateOldPrice = (currentPrice) => {
         let oldPrice;
 
         if (currentPrice <= 10000) {
-            // small prices → fake big slash
             const min = currentPrice + 2000;
             const max = currentPrice + 8000;
             oldPrice = Math.floor(Math.random() * (max - min + 1)) + min;
         } else if (currentPrice <= 30000) {
-            // medium → 20% - 50% higher
             const min = Math.floor(currentPrice * 1.2);
             const max = Math.floor(currentPrice * 1.5);
             oldPrice = Math.floor(Math.random() * (max - min + 1)) + min;
         } else {
-            // big price → +30% to +60%
             const min = Math.floor(currentPrice * 1.3);
             const max = Math.floor(currentPrice * 1.6);
             oldPrice = Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
-        savedOldPrices[cakeId] = oldPrice;
-        localStorage.setItem("oldPrices", JSON.stringify(savedOldPrices));
         return oldPrice;
     };
+
+    // ✅ Main function: checks if price changed before regenerating
+    const getOldPrice = (cakeId, currentPrice) => {
+        const savedData = JSON.parse(localStorage.getItem("oldPrices") || "{}");
+
+        const existing = savedData[cakeId];
+
+        // If we have a record and price hasn't changed → return saved one
+        if (existing && existing.currentPrice === currentPrice) {
+            return existing.oldPrice;
+        }
+
+        // Otherwise, regenerate a new old price
+        const oldPrice = generateOldPrice(currentPrice);
+
+        // Save both oldPrice and currentPrice for future comparison
+        savedData[cakeId] = { oldPrice, currentPrice };
+        localStorage.setItem("oldPrices", JSON.stringify(savedData));
+
+        return oldPrice;
+    };
+
 
     const navigate = useNavigate();
 

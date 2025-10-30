@@ -26,9 +26,8 @@ const Viewscake = () => {
     fetchCakeDetails();
   }, [id]);
 
-  // Get old price safely after cake is fetched
   const oldPrices = JSON.parse(localStorage.getItem("oldPrices") || "{}");
-  const oldPrice = cake && oldPrices[cake._id];
+  const oldPrice = cake && oldPrices[cake._id]?.oldPrice; // ✅ access .oldPrice safely
 
 
 
