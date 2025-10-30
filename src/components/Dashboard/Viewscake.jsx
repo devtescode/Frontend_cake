@@ -15,7 +15,6 @@ const Viewscake = () => {
     const fetchCakeDetails = async () => {
       try {
         const res = await axios.get(`http://localhost:4500/admin/getsingleplan/${id}`);
-
         setCake(res.data);
       } catch (error) {
         console.log("Error fetching cake:", error);
@@ -26,6 +25,12 @@ const Viewscake = () => {
 
     fetchCakeDetails();
   }, [id]);
+
+  // Get old price safely after cake is fetched
+  const oldPrices = JSON.parse(localStorage.getItem("oldPrices") || "{}");
+  const oldPrice = cake && oldPrices[cake._id];
+
+
 
   if (loading) {
     return (
@@ -90,12 +95,20 @@ const Viewscake = () => {
 
                 {/* Price Section */}
                 <div className="mb-4">
-                  <div className="flex items-center gap-3 mb-2">
-                    {/* ₦ {Number(cake.price).toLocaleString()} */}
-                    <span className="text-3xl font-bold text-gray-900">₦ {cake.price.toLocaleString()}</span>
-                    <span className="text-lg line-through text-gray-400">₦ {cake.price.toLocaleString()}</span>
-                    <span className="text-orange-500 font-bold text-lg">%</span>
-                  </div>
+                  {cake && (
+                    <div className="flex items-center gap-3 mt-3">
+                      <p className="text-pink-500 font-bold text-xl">
+                        ₦ {Number(cake.price).toLocaleString()}
+                      </p>
+                      {oldPrice && (
+                        <span className="text-lg line-through text-gray-400">
+                          ₦ {Number(oldPrice).toLocaleString()}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
+
                   <p className="text-orange-500 font-semibold text-sm">{cake.description}</p>
                 </div>
 
@@ -154,7 +167,7 @@ const Viewscake = () => {
                 <div>
                   <h2 className="font-bold text-gray-900 mb-0">DELIVERY & RETURNS</h2>
                   <div className="flex items-center mb-0 text-sm">
-                   Sweet Delights <img src={logo} alt="Logo" className="h-15 w-15" />
+                    Sweet Delights <img src={logo} alt="Logo" className="h-15 w-15" />
                   </div>
                   <p className="text-xs text-gray-700 leading-relaxed">
                     The BEST products, delivered faster. Now PAY on DELIVERY, Cash or Bank Transfer Anywhere, Zero Wahala!{" "}
