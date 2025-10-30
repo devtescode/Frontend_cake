@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { FaShoppingCart } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Cakespage = () => {
     const [cakes, setCakes] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedCake, setSelectedCake] = useState(null); // 👈 for modal
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCakes = async () => {
             try {
                 const res = await axios.get("http://localhost:4500/admin/admingetplan");
-                // console.log(res, "get responde");
-
                 setCakes(res.data.plans);
             } catch (error) {
                 console.log("Error fetching cakes", error);
@@ -44,42 +47,20 @@ const Cakespage = () => {
         return oldPrice;
     };
 
-    // ✅ Main function: checks if price changed before regenerating
+    // ✅ Only regenerate if price has changed
     const getOldPrice = (cakeId, currentPrice) => {
         const savedData = JSON.parse(localStorage.getItem("oldPrices") || "{}");
-
         const existing = savedData[cakeId];
 
-        // If we have a record and price hasn't changed → return saved one
         if (existing && existing.currentPrice === currentPrice) {
             return existing.oldPrice;
         }
 
-        // Otherwise, regenerate a new old price
         const oldPrice = generateOldPrice(currentPrice);
-
-        // Save both oldPrice and currentPrice for future comparison
         savedData[cakeId] = { oldPrice, currentPrice };
         localStorage.setItem("oldPrices", JSON.stringify(savedData));
-
         return oldPrice;
     };
-
-
-    const navigate = useNavigate();
-
-    // const handleViewCake = (cake) => {
-    //     navigate(`/viewscakes/${cake._id}`);
-    //     console.log(cake, "our cakes");
-
-    // };
-
-
-
-
-
-
-
 
     if (loading) {
         return (
@@ -92,6 +73,7 @@ const Cakespage = () => {
     return (
         <div className="">
             <h2 className="text-2xl font-bold mb-2 text-gray-800">Order Cakes</h2>
+
             {cakes.length === 0 ? (
                 <p className="text-center text-red-500 font-semibold">No cakes available</p>
             ) : (
@@ -107,7 +89,9 @@ const Cakespage = () => {
                                     className="w-full h-48 object-cover rounded-lg"
                                 />
 
-                                <p className="text-gray-900 text-md mt-2">{cake.name}</p>
+                                <p className="text-gray-900 text-md mt-2 font-semibold">
+                                    {cake.name}
+                                </p>
 
                                 <div className="flex items-center gap-2 mt-1">
                                     <p className="font-bold text-pink-500">
@@ -118,31 +102,83 @@ const Cakespage = () => {
                                     </p>
                                 </div>
 
-                                {/* ✅ View to Add button */}
-                                {/* <button
-                                    onClick={() => handleViewCake(cake)}
-                                    className="mt-3 w-full bg-pink-500 text-white py-2 rounded-lg text-sm hover:bg-pink-600 transition-colors"
-                                >
-                                    View to Add
-                                </button> */}
+                                <div className="flex justify-between items-center mt-2">
+                                    {/* 👇 Opens modal */}
+                                    <button
+                                        onClick={() => setSelectedCake(cake)}
+                                        className="text-sm font-medium hover:text-pink-600 transition-colors"
+                                    >
+                                        View
+                                    </button>
 
-
-                                <button
-                                    onClick={() => {
-                                        navigate(`/userdashboard/viewscake/${cake._id}`)
-                                    }}
-                                    className="mt-3 bg-pink-500 text-white px-3 py-2 rounded-lg text-sm">
-                                    View to Add
-                                </button>
-
-
+                                    <button
+                                        onClick={() =>
+                                            navigate(`/userdashboard/viewscake/${cake._id}`)
+                                        }
+                                        className="btn btn-primary py-1.5 px-4 flex items-center text-sm bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors"
+                                    >
+                                        <FaShoppingCart className="mr-1" /> View to Add
+                                    </button>
+                                </div>
                             </div>
                         );
                     })}
                 </div>
             )}
-        </div>
 
+            {/* ✅ Modal for viewing cake details */}
+            <AnimatePresence>
+                {selectedCake && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            className="bg-white rounded-2xl shadow-xl w-[90%] max-w-md p-6 relative"
+                        >
+                            {/* ❌ Close Button */}
+                            <button
+                                onClick={() => setSelectedCake(null)}
+                                className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-lg"
+                            >
+                                ✕
+                            </button>
+
+                            {/* Cake Image */}
+                            <img
+                                src={selectedCake.image}
+                                alt={selectedCake.name}
+                                className="w-full h-52 object-cover rounded-lg mb-4 mt-7"
+                            />
+
+                            {/* Cake Info */}
+                            <h2 className="text-xl font-semibold text-gray-800">
+                                {selectedCake.name}
+                            </h2>
+                            <p className="text-pink-600 font-bold mt-1">
+                                Price: ₦ {Number(selectedCake.price).toLocaleString()}
+                            </p>
+                            <p className="text-gray-600 mt-3">
+                                Description : {selectedCake.description || "No description available."}
+                            </p>
+
+                            <p className="text-sm text-gray-400 mt-2">
+                                Category: {selectedCake.category}
+                            </p>
+
+                            <div className="mt-5 flex justify-end">
+                                <button
+                                    onClick={() => setSelectedCake(null)}
+                                    className="px-4 py-2 text-sm bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+        </div>
     );
 };
 
