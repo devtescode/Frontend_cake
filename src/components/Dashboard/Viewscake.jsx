@@ -4,6 +4,8 @@ import axios from "axios";
 import { Heart, ShoppingCart, Star, Truck, RotateCcw } from "lucide-react"
 import logo from '../../assets/logo.png'
 import { FaSpinner } from "react-icons/fa";
+// import ukData from "../../../public/ukData.json";
+
 
 const Viewscake = () => {
   const { id } = useParams();
@@ -26,6 +28,38 @@ const Viewscake = () => {
 
     fetchCakeDetails();
   }, [id]);
+
+  const [ukData, setUkData] = useState([]);
+  const [selectedRegion, setSelectedRegion] = useState("");
+  const [filteredCities, setFilteredCities] = useState([]);
+  const [selectedCity, setSelectedCity] = useState("");
+
+  useEffect(() => {
+    fetch("/ukData.json")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to load JSON");
+        return res.json();
+      })
+      .then((data) => setUkData(data))
+      .catch((err) => console.error("Error loading JSON:", err));
+  }, []);
+
+  // Extract all unique regions
+  const uniqueRegions = [...new Set(ukData.map((item) => item.admin_name))];
+
+  // Whenever region changes, update available cities
+  useEffect(() => {
+    if (selectedRegion) {
+      const cities = ukData
+        .filter((item) => item.admin_name === selectedRegion)
+        .map((item) => item.city);
+      setFilteredCities(cities);
+      setSelectedCity(""); // reset city selection
+    } else {
+      setFilteredCities([]);
+    }
+  }, [selectedRegion, ukData]);
+
 
   const oldPrices = JSON.parse(localStorage.getItem("oldPrices") || "{}");
   const oldPrice = cake && oldPrices[cake._id]?.oldPrice; // ✅ access .oldPrice safely
@@ -179,27 +213,81 @@ const Viewscake = () => {
 
                 {/* Location Selection */}
                 <div>
-                  <h3 className="font-bold text-gray-900 mb-3">Choose your location</h3>
-                  <select
+                  {/* <h3 className="font-bold text-gray-900 mb-3">Choose your city</h3> */}
+                  {/* <select
+                    value={selectedCity}
+                    onChange={(e) => setSelectedCity(e.target.value)}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
                   >
-                    <option>Lagos</option>
-                    <option>Abuja</option>
-                    <option>Kano</option>
+                    <option value="">Select a city</option>
+                    {ukData.map((item, idx) => (
+                      <option key={idx} value={item.city}>
+                        {item.city}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
-                {/* Delivery Location */}
                 <div>
+                  <h3 className="font-bold text-gray-900 mb-3">Choose your region</h3>
                   <select
-                    // value={selectedDelivery}
-                    // onChange={(e) => setSelectedDelivery(e.target.value)}
+                    value={selectedRegion}
+                    onChange={(e) => setSelectedRegion(e.target.value)}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
                   >
-                    <option>LEKKI-AJAH (SANGOTEDO)</option>
-                    <option>IKEJA</option>
-                    <option>VI</option>
-                  </select>
+                    <option value="">Select a region</option>
+                    {uniqueRegions.map((region, idx) => (
+                      <option key={idx} value={region}>
+                        {region}
+                      </option>
+                    ))}
+                  </select> */}
+                  <div className="space-y-3">
+                    {/* REGION DROPDOWN */}
+                    <div>
+                      <h3 className="font-bold text-gray-900 mb-1">Choose your region</h3>
+                      <select
+                        value={selectedRegion}
+                        onChange={(e) => setSelectedRegion(e.target.value)}
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      >
+                        <option value="">Select a region</option>
+                        {uniqueRegions.map((region, idx) => (
+                          <option key={idx} value={region}>
+                            {region}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* CITY DROPDOWN */}
+                    <div>
+                      <h3 className="font-bold text-gray-900 mb-1">Choose your city</h3>
+                      <select
+                        value={selectedCity}
+                        onChange={(e) => setSelectedCity(e.target.value)}
+                        disabled={!selectedRegion}
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500 disabled:bg-gray-100"
+                      >
+                        <option value="">
+                          {selectedRegion ? "Select a city" : "Select a region first"}
+                        </option>
+                        {filteredCities.map((city, idx) => (
+                          <option key={idx} value={city}>
+                            {city}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Display selection */}
+                    {selectedCity && selectedRegion && (
+                      <p className="mt-4 text-gray-700">
+                        You selected <strong>{selectedCity}</strong> in{" "}
+                        <strong>{selectedRegion}</strong>.
+                      </p>
+                    )}
+                  </div>
                 </div>
 
                 {/* Pickup Station */}
