@@ -8,12 +8,93 @@ import { FaSpinner } from "react-icons/fa";
 
 
 const Viewscake = () => {
-  const { id } = useParams();
-  console.log(id, "my page id");
+  // const { id } = useParams();
+  // console.log(id, "my page id");
 
+  // const [cake, setCake] = useState(null);
+  // const [loading, setLoading] = useState(true);
+
+  // useEffect(() => {
+  //   const fetchCakeDetails = async () => {
+  //     try {
+  //       const res = await axios.get(`http://localhost:4500/admin/getsingleplan/${id}`);
+  //       setCake(res.data);
+  //     } catch (error) {
+  //       console.log("Error fetching cake:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchCakeDetails();
+  // }, [id]);
+
+  // const [ukData, setUkData] = useState([]);
+  // const [selectedRegion, setSelectedRegion] = useState("");
+  // const [filteredCities, setFilteredCities] = useState([]);
+  // const [selectedCity, setSelectedCity] = useState("");
+  // const [deliveryAddress, setDeliveryAddress] = useState("");
+
+
+  // useEffect(() => {
+  //   fetch("/ukData.json")
+  //     .then((res) => {
+  //       if (!res.ok) throw new Error("Failed to load JSON");
+  //       return res.json();
+  //     })
+  //     .then((data) => setUkData(data))
+  //     .catch((err) => console.error("Error loading JSON:", err));
+  // }, []);
+
+  // // Extract all unique regions
+  // const uniqueRegions = [...new Set(ukData.map((item) => item.admin_name))];
+
+  // // Whenever region changes, update available cities
+  // useEffect(() => {
+  //   if (selectedRegion) {
+  //     const cities = ukData
+  //       .filter((item) => item.admin_name === selectedRegion)
+  //       .map((item) => item.city);
+  //     setFilteredCities(cities);
+  //     setSelectedCity(""); // reset city selection
+  //   } else {
+  //     setFilteredCities([]);
+  //   }
+  // }, [selectedRegion, ukData]);
+
+
+  // const oldPrices = JSON.parse(localStorage.getItem("oldPrices") || "{}");
+  // const oldPrice = cake && oldPrices[cake._id]?.oldPrice; // ✅ access .oldPrice safely
+
+
+
+  // if (loading) {
+  //   return (
+  //     <div className=" py-20 flex justify-center items-center h-[60vh] text-lg font-medium text-gray-600">
+  //       <FaSpinner className="animate-spin text-4xl text-pink-500" />
+  //     </div>
+  //   );
+  // }
+
+  // if (!cake) {
+  //   return (
+  //     <div className="text-center mt-20 text-red-500 font-bold">
+  //       Cake not found.
+  //     </div>
+  //   );
+  // }
+
+  const { id } = useParams();
   const [cake, setCake] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [ukData, setUkData] = useState([]);
+  const [selectedRegion, setSelectedRegion] = useState("");
+  const [filteredCities, setFilteredCities] = useState([]);
+  const [selectedCity, setSelectedCity] = useState("");
+  const [deliveryAddress, setDeliveryAddress] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // ✅ Fetch Cake Details
   useEffect(() => {
     const fetchCakeDetails = async () => {
       try {
@@ -25,15 +106,10 @@ const Viewscake = () => {
         setLoading(false);
       }
     };
-
     fetchCakeDetails();
   }, [id]);
 
-  const [ukData, setUkData] = useState([]);
-  const [selectedRegion, setSelectedRegion] = useState("");
-  const [filteredCities, setFilteredCities] = useState([]);
-  const [selectedCity, setSelectedCity] = useState("");
-
+  // ✅ Load UK Data from JSON
   useEffect(() => {
     fetch("/ukData.json")
       .then((res) => {
@@ -44,31 +120,71 @@ const Viewscake = () => {
       .catch((err) => console.error("Error loading JSON:", err));
   }, []);
 
-  // Extract all unique regions
+  // ✅ Extract Unique Regions
   const uniqueRegions = [...new Set(ukData.map((item) => item.admin_name))];
 
-  // Whenever region changes, update available cities
+  // ✅ Filter cities based on selected region
   useEffect(() => {
     if (selectedRegion) {
       const cities = ukData
         .filter((item) => item.admin_name === selectedRegion)
         .map((item) => item.city);
       setFilteredCities(cities);
-      setSelectedCity(""); // reset city selection
+      setSelectedCity("");
     } else {
       setFilteredCities([]);
     }
   }, [selectedRegion, ukData]);
 
-
+  // ✅ Get old price from localStorage
   const oldPrices = JSON.parse(localStorage.getItem("oldPrices") || "{}");
-  const oldPrice = cake && oldPrices[cake._id]?.oldPrice; // ✅ access .oldPrice safely
+  const oldPrice = cake && oldPrices[cake._id]?.oldPrice;
 
+  // ✅ Handle Add to Cart
+  const handleAddToCart = async () => {
+    const userData = JSON.parse(localStorage.getItem("UserData"));
+
+    if (!userData) {
+      return Swal.fire("Login Required", "Please log in to continue", "warning");
+    }
+
+    if (!selectedRegion || !selectedCity || !deliveryAddress) {
+      return Swal.fire("Incomplete Info", "Please fill in your delivery details", "info");
+    }
+
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("UserData"));
+      const userId = storedUser?.id; // ✅ use .id instead of ._id
+      const res = await axios.post("http://localhost:4500/usercake/useraddorder", {
+        userId,
+        planId: cake._id,
+        region: selectedRegion,
+        city: selectedCity,
+        address: deliveryAddress,
+      });
+
+      console.log(res, "response");
+
+
+      Swal.fire({
+        title: "Order Added!",
+        text: "Your order has been successfully added.",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
+      console.log("Order created:", res.data);
+    } catch (error) {
+      console.error("Error saving order:", error);
+      Swal.fire("Error", "Unable to add order. Please try again.", "error");
+    }
+  };
 
 
   if (loading) {
     return (
-      <div className=" py-20 flex justify-center items-center h-[60vh] text-lg font-medium text-gray-600">
+      <div className="py-20 flex justify-center items-center h-[60vh] text-lg font-medium text-gray-600">
         <FaSpinner className="animate-spin text-4xl text-pink-500" />
       </div>
     );
@@ -81,6 +197,8 @@ const Viewscake = () => {
       </div>
     );
   }
+
+
 
   return (
     <>
@@ -165,10 +283,20 @@ const Viewscake = () => {
                   </p>
                 </div>
 
-                {/* Add to Cart Button */}
-                <button className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 mb-6 transition-colors">
-                  <ShoppingCart size={20} />
-                  Add to cart
+                <button
+                  onClick={handleAddToCart}
+                  disabled={isSubmitting}
+                  className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 mb-6 transition-colors disabled:opacity-70"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <FaSpinner className="animate-spin" /> Adding...
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart size={20} /> Add to Cart
+                    </>
+                  )}
                 </button>
 
                 {/* Promotions */}
@@ -211,39 +339,9 @@ const Viewscake = () => {
                   </p>
                 </div>
 
-                {/* Location Selection */}
                 <div>
-                  {/* <h3 className="font-bold text-gray-900 mb-3">Choose your city</h3> */}
-                  {/* <select
-                    value={selectedCity}
-                    onChange={(e) => setSelectedCity(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  >
-                    <option value="">Select a city</option>
-                    {ukData.map((item, idx) => (
-                      <option key={idx} value={item.city}>
-                        {item.city}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <h3 className="font-bold text-gray-900 mb-3">Choose your region</h3>
-                  <select
-                    value={selectedRegion}
-                    onChange={(e) => setSelectedRegion(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  >
-                    <option value="">Select a region</option>
-                    {uniqueRegions.map((region, idx) => (
-                      <option key={idx} value={region}>
-                        {region}
-                      </option>
-                    ))}
-                  </select> */}
                   <div className="space-y-3">
-                    {/* REGION DROPDOWN */}
+                    {/* Choose Region */}
                     <div>
                       <h3 className="font-bold text-gray-900 mb-1">Choose your region</h3>
                       <select
@@ -260,7 +358,7 @@ const Viewscake = () => {
                       </select>
                     </div>
 
-                    {/* CITY DROPDOWN */}
+                    {/* Choose City */}
                     <div>
                       <h3 className="font-bold text-gray-900 mb-1">Choose your city</h3>
                       <select
@@ -280,7 +378,20 @@ const Viewscake = () => {
                       </select>
                     </div>
 
-                    {/* Display selection */}
+                    {/* ✅ Address Textarea */}
+                    <div>
+                      <h3 className="font-bold text-gray-900 mb-1">Delivery Address</h3>
+                      <textarea
+                        value={deliveryAddress}
+                        onChange={(e) => setDeliveryAddress(e.target.value)}
+                        rows="3"
+                        placeholder="Enter your full delivery address (e.g., Flat 2B, 14 Oxford Street, London)"
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none"
+                      />
+
+                    </div>
+
+                    {/* Display selection summary */}
                     {selectedCity && selectedRegion && (
                       <p className="mt-4 text-gray-700">
                         You selected <strong>{selectedCity}</strong> in{" "}
@@ -289,6 +400,7 @@ const Viewscake = () => {
                     )}
                   </div>
                 </div>
+
 
                 {/* Pickup Station */}
                 <div className="border border-gray-200 rounded-lg p-4">
@@ -310,7 +422,6 @@ const Viewscake = () => {
                   </p>
                 </div>
 
-                {/* Door Delivery */}
                 <div className="border border-gray-200 rounded-lg p-4">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-3">
@@ -330,7 +441,6 @@ const Viewscake = () => {
                   </p>
                 </div>
 
-                {/* Return Policy */}
                 <div className="border border-gray-200 rounded-lg p-4">
                   <div className="flex items-center gap-3 mb-2">
                     <RotateCcw size={24} className="text-gray-700" />

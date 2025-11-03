@@ -15,13 +15,16 @@ import {
   Menu,
   X,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  ListOrderedIcon,
+  LucideListOrdered
 } from 'lucide-react';
 import OverviewPage from './OverviewPage';
 import ProfilePage from './ProfilePage';
 import { Link, Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import Cakespage from './Cakespage';
 import Viewscake from './Viewscake';
+import Orderdisplaypage from './Orderdisplaypage';
 // import Viewscake from './Viewscake';
 
 const Userdashboard = () => {
@@ -61,6 +64,7 @@ const Userdashboard = () => {
     { id: 'overview', label: 'Dashboard', icon: Package },
     { id: 'profile', label: 'Profile', icon: User },
     { id: 'cakes', label: 'Cakes', icon: ShoppingBag },
+    { id: 'order', label: 'Order', icon: LucideListOrdered },
     { id: 'payments', label: 'Payments', icon: CreditCard },
     { id: 'favorites', label: 'Favorites', icon: Heart },
     { id: 'reviews', label: 'Reviews', icon: MessageSquare },
@@ -121,7 +125,7 @@ const Userdashboard = () => {
       case 'profile': return <ProfilePage />;
       case 'cakes': return <Cakespage />;
       case 'viewscake': return <Viewscake />;
-
+      case 'order': return <Orderdisplaypage />;
     }
   };
 

@@ -12,6 +12,7 @@ import Viewscake from './components/Dashboard/Viewscake'
 import Cakespage from './components/Dashboard/Cakespage'
 import ProfilePage from './components/Dashboard/ProfilePage'
 import OverviewPage from './components/Dashboard/OverviewPage'
+import Orderdisplaypage from './components/Dashboard/Orderdisplaypage'
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
           <Route path="profile" element={<ProfilePage />} />
           <Route path="cakes" element={<Cakespage />} />
           <Route path="viewscake/:id" element={<Viewscake />} />
+          <Route path='order' element={<Orderdisplaypage/>}/>
         </Route>
 
         <Route path='/adlogin' element={<Adminlogin />} />
