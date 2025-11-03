@@ -66,9 +66,10 @@ const Header = () => {
           </a>
           
           {/* CTA Button */}
-          <a to="/shop" className="btn btn-primary">
-            Register
-          </a>
+          <Link to="/adlogin" className="font-medium hover:text-primary-dark transition-colors py-2 border-b border-gray-100">Admin</Link>
+          {/* <p to="/adlogin" className="btn btn-primary">
+            Admin
+          </p> */}
         </div>
 
         {/* Mobile Menu Button */}

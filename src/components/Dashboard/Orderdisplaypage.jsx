@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaSpinner, FaTrashAlt } from "react-icons/fa";
 
 const Orderdisplaypage = () => {
     const [orders, setOrders] = useState([]);
@@ -38,8 +38,8 @@ const Orderdisplaypage = () => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen text-lg font-semibold text-gray-600">
-                Loading your orders...
+            <div className=" py-20 flex justify-center items-center h-[60vh] text-lg font-medium text-gray-600">
+                <FaSpinner className="animate-spin text-4xl text-pink-500" />
             </div>
         );
     }
