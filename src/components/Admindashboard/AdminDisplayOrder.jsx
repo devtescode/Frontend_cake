@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { FaSpinner } from "react-icons/fa";
 
 const AdminDisplayOrder = () => {
     const [orders, setOrders] = useState([]);
@@ -85,8 +86,8 @@ const AdminDisplayOrder = () => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-screen">
-                <p className="text-gray-600 text-lg">Loading orders...</p>
+            <div className=" py-20 flex justify-center items-center h-[60vh] text-lg font-medium text-gray-600">
+                <FaSpinner className="animate-spin text-4xl text-pink-500" />
             </div>
         );
     }
