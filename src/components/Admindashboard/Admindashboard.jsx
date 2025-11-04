@@ -25,7 +25,8 @@ import {
     Menu,
     X,
     ChevronLeft,
-    ChevronRight
+    ChevronRight,
+    DroneIcon
 } from 'lucide-react';
 import AdminLayout from './AdminLayout';
 // import ProfilePage from './ProfilePage';
@@ -37,6 +38,8 @@ import UsersManagement from './UsersManagement';
 import CommentsManagement from './CommentsManagement';
 import NotificationsManagement from './NotificationsManagement';
 import Settingspage from './Settingspage';
+import AdminDisplayOrder from './AdminDisplayOrder';
+import AdminSettledOrders from './AdminSettledOrders';
 
 // Import all page components
 // import AdminLayout from '../AdminLayout';
@@ -78,10 +81,11 @@ const Admindashboard = () => {
         { id: 'adminlayout', label: 'Dashboard', icon: Package },
         { id: 'Cakes', label: 'Cakes', icon: User },
         { id: 'UsersManagement', label: 'Users', icon: ShoppingBag },
+        { id: 'Order', label: 'Delivery Info', icon: MapPin },
+        { id: 'Settled', label: 'Settled', icon: DroneIcon },
         { id: 'Comments', label: 'Comments', icon: CreditCard },
         { id: 'Notifications', label: 'Notifications', icon: Bell },
         { id: 'Settings', label: 'Settings', icon: Settings },
-        // { id: 'delivery', label: 'Delivery Info', icon: MapPin },
         // { id: 'settings', label: 'Settings', icon: Settings }
     ];
 
@@ -139,6 +143,8 @@ const Admindashboard = () => {
               case 'Comments': return <CommentsManagement />;
               case 'Notifications': return <NotificationsManagement />;
               case 'Settings': return <Settingspage/>;
+              case 'Order': return <AdminDisplayOrder/>;
+              case 'Settled': return <AdminSettledOrders/>;
             //   case 'reviews': return <ReviewsPage />;
             //   case 'notifications': return <NotificationsPage />;
             //   case 'delivery': return <DeliveryPage />;

@@ -124,7 +124,7 @@ const Orderdisplaypage = () => {
                     <span>₦ {subtotal.toLocaleString()}</span>
                 </div>
                 <button
-                    className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-md transition-all"
+                    className="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 rounded-md transition-all"
                 >
                     Checkout (₦ {subtotal.toLocaleString()})
                 </button>
