@@ -207,10 +207,8 @@ const Viewscake = () => {
   return (
     <>
       <div className="min-h-screen bg-white">
-        {/* Main Container */}
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Left Column - Product Image */}
             <div className="md:col-span-1">
               <div className="bg-white rounded-lg p-4 sticky top-6">
                 <img
@@ -218,9 +216,7 @@ const Viewscake = () => {
                   alt={cake.image}
                   className="w-full h-80 object-cover rounded-lg mb-4"
                 />
-                {/* <p className="text-sm text-gray-600 text-center mb-4">120*160CM</p> */}
 
-                {/* Share Section */}
                 <div className="border-t border-gray-200 pt-4">
                   <p className="text-sm font-semibold text-gray-800 mb-3">SHARE THIS PRODUCT</p>
                   <div className="flex gap-3 justify-center">
