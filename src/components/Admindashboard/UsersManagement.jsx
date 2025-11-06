@@ -181,14 +181,14 @@ const UsersManagement = () => {
                       <button className="text-indigo-600 hover:text-indigo-900 text-sm">
                         View
                       </button>
-                      <button
+                      {/* <button
                         className={`${user.isActive
                           ? "text-red-600 hover:text-red-900"
                           : "text-green-600 hover:text-green-900"
                           } text-sm`}
                       >
                         {user.isActive ? "Deactivate" : "Activate"}
-                      </button>
+                      </button> */}
                     </td>
                   </motion.tr>
                 ))
