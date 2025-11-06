@@ -37,8 +37,11 @@ const AdminDisplayOrder = () => {
                     city: order.city,
                     address: order.address,
                     status: order.status,
+                    quantity: order.quantity,
                 };
             }
+            // console.log(order, "key");
+            
 
             acc[key].orders.push(order);
             return acc;
@@ -264,6 +267,9 @@ const AdminDisplayOrder = () => {
                                         </p>
                                         <p className="text-xs text-gray-500">
                                             Ordered: {new Date(order.createdAt).toLocaleDateString()}
+                                        </p>
+                                        <p className="text-xs text-gray-500">
+                                            Quantity: {order.quantity}
                                         </p>
                                         <span
                                             className={`inline-block mt-1 px-3 py-1 text-xs font-semibold rounded-full ${order.status === "Pending"

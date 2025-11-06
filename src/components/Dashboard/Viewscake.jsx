@@ -282,8 +282,7 @@ const Viewscake = () => {
                 {/* Shipping Info */}
                 <div className="bg-gray-50 p-3 rounded-lg mb-6 text-sm text-gray-700">
                   <p className="mb-2">
-                    + shipping from <span className="font-semibold">₦ shipping</span> from{" "}
-                    <span className="font-semibold">shipping</span>
+                    <span className="font-semibold"></span>
                   </p>
                 </div>
 
@@ -302,7 +301,6 @@ const Viewscake = () => {
                     </>
                   )}
                 </button>
-
 
                 
 

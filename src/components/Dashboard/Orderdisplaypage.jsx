@@ -30,6 +30,45 @@ const Orderdisplaypage = () => {
         fetchOrders();
     }, []);
 
+    // ➕ Increment quantity
+    const handleIncrement = async (orderId, currentQuantity) => {
+        const newQuantity = currentQuantity + 1;
+        try {
+            await axios.put(`http://localhost:4500/usercake/updatequantity/${orderId}`, {
+                quantity: newQuantity,
+            });
+
+            setOrders((prevOrders) =>
+                prevOrders.map((order) =>
+                    order._id === orderId ? { ...order, quantity: newQuantity } : order
+                )
+            );
+        } catch (error) {
+            console.error("Error updating quantity:", error);
+        }
+    };
+
+    // ➖ Decrement quantity
+    const handleDecrement = async (orderId, currentQuantity) => {
+        if (currentQuantity <= 1) return;
+        const newQuantity = currentQuantity - 1;
+
+        try {
+            await axios.put(`http://localhost:4500/usercake/updatequantity/${orderId}`, {
+                quantity: newQuantity,
+            });
+
+            setOrders((prevOrders) =>
+                prevOrders.map((order) =>
+                    order._id === orderId ? { ...order, quantity: newQuantity } : order
+                )
+            );
+        } catch (error) {
+            console.error("Error updating quantity:", error);
+        }
+    };
+
+
 
     const handleRemove = async (orderId) => {
         try {
@@ -71,7 +110,9 @@ const Orderdisplaypage = () => {
 
 
 
-    const subtotal = orders.reduce((sum, order) => sum + order.price, 0);
+    // const subtotal = orders.reduce((sum, order) => sum + order.price, 0);
+    const subtotal = orders.reduce((sum, order) => sum + order.price * order.quantity, 0);
+
 
     if (loading) {
         return (
@@ -148,7 +189,23 @@ const Orderdisplaypage = () => {
                                 );
                             })()}
 
-                            <p className="text-xs text-orange-600 font-semibold">-15%</p>
+                            {/* <p className="text-xs text-orange-600 font-semibold">-15%</p> */}
+                            <div className=" gap-2 mt-2 text-lg font-bold text-gray-900">
+                                <button
+                                    onClick={() => handleDecrement(order._id, order.quantity)}
+                                    className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 text-gray-700 font-bold"
+                                >
+                                    -
+                                </button>
+                                <span className="text-gray-800 font-semibold">{order.quantity}</span>
+                                <button
+                                    onClick={() => handleIncrement(order._id, order.quantity)}
+                                    className="px-2 py-1 bg-pink-500 text-white rounded hover:bg-pink-600"
+                                >
+                                    +
+                                </button>
+                            </div>
+
                         </div>
                     </div>
                 ))}
