@@ -35,9 +35,12 @@ const AdminDisplayOrder = () => {
                     orders: [],
                     region: order.region,
                     city: order.city,
+                    address: order.address,  
                     status: order.status,
                 };
             }
+            console.log(orders, "orders");
+            
             acc[key].orders.push(order);
             return acc;
         }, {})
@@ -93,118 +96,125 @@ const AdminDisplayOrder = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 p-6">
-            <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+        <div className="min-h-screen bg-gray-50 p-0">
+            <h1 className="text-3xl font-bold text-gray-800 mb-3 text-center">
                 Customer Orders
             </h1>
 
             {/* Search and Filter */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-                    <div className="flex items-center space-x-4">
-                        <input
-                            type="text"
-                            placeholder="Search by name, email, phone, city, or region..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-80 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
-                        <select
-                            value={statusFilter}
-                            onChange={(e) => setStatusFilter(e.target.value)}
-                            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        >
-                            <option value="All">All Status</option>
-                            <option value="Pending">Pending</option>
-                            {/* <option value="Approved">Approved</option>
-                            <option value="Delivered">Delivered</option>
-                            <option value="Cancelled">Cancelled</option> */}
-                        </select>
+            <div className="bg-white sm:p-4 mb-6 w-[100%] mx-auto md:w-full">
+
+
+                <div className="bg-white rounded-lg shadow-sm p-4 mb-3 w-[100%] mx-auto md:w-full">
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0 w-full">
+                            <input
+                                type="text"
+                                placeholder="Search by name, email, phone, city, or region..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            />
+                            <select
+                                value={statusFilter}
+                                onChange={(e) => setStatusFilter(e.target.value)}
+                                className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                                <option value="All">All Status</option>
+                                <option value="Pending">Pending</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
+
+
+
+                {/* Orders Table */}
+                {filteredOrders.length === 0 ? (
+                    <p className="text-gray-500 text-center mt-10">
+                        No matching orders found.
+                    </p>
+                ) : (
+                    <div className="w-full overflow-x-auto bg-white shadow-lg rounded-lg border border-gray-200">
+                        <div className="inline-block min-w-full align-middle">
+                            <table className="min-w-full table-auto border-collapse text-sm text-left text-gray-700">
+                                <thead className="bg-blue-50 text-gray-600 uppercase text-xs font-semibold">
+                                    <tr>
+                                        <th className="px-0 py-2 whitespace-nowrap">Customer</th>
+                                        {/* <th className="px-0 py-2 whitespace-nowrap">Phone</th> */}
+                                        <th className="px-0 py-2 text-center whitespace-nowrap">Status</th>
+                                        <th className="px-0 py-2 text-center whitespace-nowrap">Orders</th>
+                                        <th className="px-0 py-2 text-center whitespace-nowrap">Action</th>
+                                        <th className="px-0 py-2 text-center whitespace-nowrap">Delivery</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filteredOrders.map((group, index) => (
+                                        <tr
+                                            key={index}
+                                            className="border-b hover:bg-gray-50 transition duration-200"
+                                        >
+                                            <td className="px-1 py-2 font-semibold text-gray-800 truncate max-w-[80px]">
+                                                {group.user?.fullname}
+                                            </td>
+                                            {/* <td className="px-1 py-2 truncate max-w-[80px]">
+                                            {group.user?.phonenumber}
+                                        </td> */}
+                                            <td className="px-1 py-2 text-center">
+                                                <span
+                                                    className={`inline-block px-2 py-1 text-xs font-semibold rounded-full ${group.status === "Pending"
+                                                        ? "bg-yellow-100 text-yellow-700"
+                                                        : group.status === "Approved"
+                                                            ? "bg-green-100 text-green-700"
+                                                            : group.status === "Cancelled"
+                                                                ? "bg-red-100 text-red-700"
+                                                                : "bg-gray-100 text-gray-700"
+                                                        }`}
+                                                >
+                                                    {group.status}
+                                                </span>
+                                            </td>
+                                            <td className="px-1 py-2 text-center">
+                                                {group.orders.length}
+                                            </td>
+                                            <td className="px-1 py-2 text-center">
+                                                <button
+                                                    onClick={() => setSelectedUserOrders(group)}
+                                                    className="px-2 py-1 bg-pink-600 text-white rounded-md text-xs font-semibold hover:bg-pink-700 transition"
+                                                >
+                                                    View
+                                                </button>
+                                            </td>
+                                            <td className="px-1 py-2 text-center relative group">
+                                                <button
+                                                    onClick={() => handleDeliveryStatus(group.orders[0]._id)}
+                                                    disabled={group.orders.length > 1}
+                                                    className={`px-2 py-1 text-white rounded-md text-xs font-semibold transition 
+                    ${group.orders.length > 1
+                                                            ? "bg-gray-400 cursor-not-allowed"
+                                                            : "bg-orange-600 hover:bg-orange-700"
+                                                        }`}
+                                                >
+                                                    Delivered
+                                                </button>
+
+                                                {/* Tooltip */}
+                                                {group.orders.length > 1 && (
+                                                    <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded-md px-2 py-1 opacity-0 group-hover:opacity-100 transition">
+                                                        Open View to Deliver
+                                                    </span>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
+
             </div>
 
-            {/* Orders Table */}
-            {filteredOrders.length === 0 ? (
-                <p className="text-gray-500 text-center mt-10">
-                    No matching orders found.
-                </p>
-            ) : (
-                <div className="overflow-x-auto bg-white shadow-lg rounded-lg">
-                    <table className="w-full text-sm text-left text-gray-700">
-                        <thead className="bg-blue-50 text-gray-600 uppercase text-xs font-semibold">
-                            <tr>
-                                <th className="px-6 py-3">Customer</th>
-                                <th className="px-6 py-3">Phone</th>
-                                <th className="px-6 py-3 text-center">Status</th>
-                                <th className="px-6 py-3 text-center">Total Orders</th>
-                                <th className="px-6 py-3 text-center">Action</th>
-                                <th className="px-6 py-3 text-center">Delivery</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredOrders.map((group, index) => (
-                                <tr
-                                    key={index}
-                                    className="border-b hover:bg-gray-50 transition duration-200"
-                                >
-                                    <td className="px-6 py-3 font-semibold text-gray-800">
-                                        {group.user?.fullname}
-                                    </td>
-                                    <td className="px-6 py-3">{group.user?.phonenumber}</td>
-
-                                    <td className="px-6 py-3">
-                                        <span
-                                            className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${group.status === "Pending"
-                                                ? "bg-yellow-100 text-yellow-700"
-                                                : group.status === "Approved"
-                                                    ? "bg-green-100 text-green-700"
-                                                    : group.status === "Cancelled"
-                                                        ? "bg-red-100 text-red-700"
-                                                        : "bg-gray-100 text-gray-700"
-                                                }`}
-                                        >
-                                            {group.status}
-                                        </span>
-                                    </td>
-
-                                    <td className="px-6 py-3 text-center">
-                                        {group.orders.length}
-                                    </td>
-                                    <td className="px-6 py-3 text-center">
-                                        <button
-                                            onClick={() => setSelectedUserOrders(group)}
-                                            className="px-4 py-1.5 bg-pink-600 text-white rounded-lg text-xs font-semibold hover:bg-pink-700 transition"
-                                        >
-                                            View
-                                        </button>
-                                    </td>
-                                    <td className="px-6 py-3 text-center relative group">
-                                        <button
-                                            onClick={() => handleDeliveryStatus(group.orders[0]._id)}
-                                            disabled={group.orders.length > 1}
-                                            className={`px-4 py-1.5 text-white rounded-lg text-xs font-semibold transition 
-      ${group.orders.length > 1
-                                                    ? "bg-gray-400 cursor-not-allowed"
-                                                    : "bg-orange-600 hover:bg-orange-700"}`}
-                                        >
-                                            Delivered
-                                        </button>
-
-                                        {/* Tooltip */}
-                                        {group.orders.length > 1 && (
-                                            <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded-md px-2 py-1 opacity-0 group-hover:opacity-100 transition">
-                                                Open View to Deliver
-                                            </span>
-                                        )}
-                                    </td>
-
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
 
             {/* Modal */}
             {selectedUserOrders && (
@@ -323,7 +333,6 @@ const AdminDisplayOrder = () => {
                             </button>
                         </div>
 
-                        {/* Region, City, Contact */}
                         <div className="mt-4 text-sm text-gray-600 border-t pt-3">
                             <p>
                                 <strong>Region:</strong> {selectedUserOrders.region}
@@ -331,11 +340,15 @@ const AdminDisplayOrder = () => {
                             <p>
                                 <strong>City:</strong> {selectedUserOrders.city}
                             </p>
+                           <strong>Address:</strong> {selectedUserOrders.address || "No address provided"}
                             <p>
                                 <strong>Email:</strong> {selectedUserOrders.user?.email}
                             </p>
                             <p>
                                 <strong>Phone:</strong> {selectedUserOrders.user?.phonenumber}
+                            </p>
+                            <p>
+                                <strong>Name:</strong> {selectedUserOrders.user?.fullname}
                             </p>
                         </div>
                     </div>

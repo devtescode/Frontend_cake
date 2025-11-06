@@ -169,7 +169,7 @@ const Admindashboard = () => {
     if (!isScreenChecked) return null;
     return (
         <div className="min-h-screen bg-gray-50 flex relative">
-            {/* Mobile Overlay */}
+            
             <AnimatePresence>
                 {isMobile && isSidebarOpen && (
                     <motion.div
@@ -183,7 +183,7 @@ const Admindashboard = () => {
                 )}
             </AnimatePresence>
 
-            {/* Sidebar */}
+           
             <motion.div
                 initial={isMobile ? "closed" : "open"}
                 animate={isMobile ? (isSidebarOpen ? "open" : "closed") : "open"}
@@ -198,11 +198,7 @@ const Admindashboard = () => {
                     <div className="flex items-center justify-between">
                         {(isSidebarExpanded || isMobile) && (
                             <div className="flex items-center space-x-3">
-                                {/* <img
-                  src="/api/placeholder/40/40"
-                  alt="Profile"
-                  className="w-10 h-10 rounded-full object-cover"
-                /> */}
+                        
                                 <div className="w-10 h-10 bg-pink-600 text-white rounded-full flex items-center justify-center font-bold">
                                     {user?.fullname ? user.fullname.charAt(0).toUpperCase() : "?"}
                                 </div>
@@ -239,7 +235,7 @@ const Admindashboard = () => {
                     </div>
                 </div>
 
-                {/* Navigation */}
+                
                 <nav className="p-2">
                     <ul className="space-y-1">
                         {sidebarItems.map(item => {
@@ -252,7 +248,7 @@ const Admindashboard = () => {
                                             if (isMobile) closeSidebar();
                                         }}
                                         className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg transition-colors group ${activeTab === item.id
-                                            ? 'bg-blue-50 text-blue-600 border-r-2 border-blue-600'
+                                            ? 'bg-pink-50 text-pink-600 border-r-2 border-pink-600'
                                             : 'text-gray-700 hover:bg-gray-50'
                                             } ${!isSidebarExpanded && !isMobile ? 'justify-center' : ''}`}
                                     >
@@ -272,9 +268,9 @@ const Admindashboard = () => {
                     </ul>
                 </nav>
 
-                {/* Logout Button */}
+               
                 <div className="absolute bottom-4 left-2 right-2">
-                    {/* <Link to="/login" className="font-medium hover:text-primary-dark transition-colors"> */}
+                   
                     <button
                         onClick={() => {
                             localStorage.removeItem("token");
@@ -291,11 +287,11 @@ const Admindashboard = () => {
                             </div>
                         )}
                     </button>
-                    {/* </Link> */}
+                    
                 </div>
             </motion.div>
 
-            {/* Main Content */}
+        
             <div className="flex-1 flex flex-col min-h-screen">
                 {/* Top Bar */}
                 <div className="bg-white shadow-sm border-b border-gray-200 p-4 flex items-center justify-between">
