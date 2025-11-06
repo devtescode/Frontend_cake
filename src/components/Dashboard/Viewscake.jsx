@@ -180,7 +180,7 @@ const Viewscake = () => {
       console.error("Error saving order:", error);
       Swal.fire("Error", "Unable to add order. Please try again.", "error");
     }
-     finally {
+    finally {
       setIsSubmitting(false);
     }
   };
@@ -221,7 +221,7 @@ const Viewscake = () => {
                 {/* <p className="text-sm text-gray-600 text-center mb-4">120*160CM</p> */}
 
                 {/* Share Section */}
-                <div className="border-t pt-4">
+                <div className="border-t border-gray-200 pt-4">
                   <p className="text-sm font-semibold text-gray-800 mb-3">SHARE THIS PRODUCT</p>
                   <div className="flex gap-3 justify-center">
                     <button className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100">
@@ -279,13 +279,6 @@ const Viewscake = () => {
                   <span className="text-sm text-gray-600"> verified ratings</span>
                 </div>
 
-                {/* Shipping Info */}
-                <div className="bg-gray-50 p-3 rounded-lg mb-6 text-sm text-gray-700">
-                  <p className="mb-2">
-                    <span className="font-semibold"></span>
-                  </p>
-                </div>
-
                 <button
                   onClick={handleAddToCart}
                   disabled={isSubmitting}
@@ -302,10 +295,10 @@ const Viewscake = () => {
                   )}
                 </button>
 
-                
+
 
                 {/* Promotions */}
-                <div className="border-t pt-6">
+                <div className="border-t border-gray-200 pt-6">
                   <h3 className="font-bold text-gray-900 mb-4">PROMOTIONS</h3>
                   <div className="space-y-3">
                     <div className="flex gap-3 items-start">
@@ -314,14 +307,14 @@ const Viewscake = () => {
                         <p className="font-semibold text-gray-900 text-sm">WhatsApp on 07034501354 To Place Your Order</p>
                       </div>
                     </div>
-                    <div className="flex gap-3 items-start">
+                    {/* <div className="flex gap-3 items-start">
                       <span className="text-orange-500 text-xl">⭐</span>
                       <div>
                         <p className="font-semibold text-gray-900 text-sm">
                           Enjoy cheaper shipping fees when you select a PickUp Station at checkout.
                         </p>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

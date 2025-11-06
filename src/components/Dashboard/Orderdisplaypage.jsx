@@ -190,17 +190,17 @@ const Orderdisplaypage = () => {
                             })()}
 
                             {/* <p className="text-xs text-orange-600 font-semibold">-15%</p> */}
-                            <div className=" gap-2 mt-2 text-lg font-bold text-gray-900">
+                            <div className="mt-2 text-lg font-bold text-gray-900">
                                 <button
                                     onClick={() => handleDecrement(order._id, order.quantity)}
-                                    className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 text-gray-700 font-bold"
+                                    className="px-2 py-0 bg-gray-200 rounded hover:bg-gray-300 text-gray-700 font-bold"
                                 >
                                     -
                                 </button>
                                 <span className="text-gray-800 font-semibold">{order.quantity}</span>
                                 <button
                                     onClick={() => handleIncrement(order._id, order.quantity)}
-                                    className="px-2 py-1 bg-pink-500 text-white rounded hover:bg-pink-600"
+                                    className="px-2 py-0 bg-pink-500 text-white rounded hover:bg-pink-600"
                                 >
                                     +
                                 </button>
@@ -210,6 +210,7 @@ const Orderdisplaypage = () => {
                     </div>
                 ))}
             </div>
+            
             <div className="bg-white shadow-sm p-6 h-fit">
                 <h2 className="text-lg font-bold text-gray-900 mb-4">Order SUMMARY</h2>
                 <div className="flex justify-between text-gray-700 font-medium mb-6">
