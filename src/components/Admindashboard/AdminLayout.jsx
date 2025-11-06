@@ -14,7 +14,7 @@ const AdminLayout = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:mt-0 mt-20">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
         <button className="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition-colors">

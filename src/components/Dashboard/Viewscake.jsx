@@ -153,6 +153,7 @@ const Viewscake = () => {
     }
 
     try {
+      setIsSubmitting(true);
       const storedUser = JSON.parse(localStorage.getItem("UserData"));
       const userId = storedUser?.id; // ✅ use .id instead of ._id
       const res = await axios.post("http://localhost:4500/usercake/useraddorder", {
@@ -178,6 +179,9 @@ const Viewscake = () => {
     } catch (error) {
       console.error("Error saving order:", error);
       Swal.fire("Error", "Unable to add order. Please try again.", "error");
+    }
+     finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -298,6 +302,9 @@ const Viewscake = () => {
                     </>
                   )}
                 </button>
+
+
+                
 
                 {/* Promotions */}
                 <div className="border-t pt-6">

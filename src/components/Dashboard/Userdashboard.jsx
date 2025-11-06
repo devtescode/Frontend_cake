@@ -25,6 +25,7 @@ import { Link, Outlet, useLocation, useNavigate, useParams } from 'react-router-
 import Cakespage from './Cakespage';
 import Viewscake from './Viewscake';
 import Orderdisplaypage from './Orderdisplaypage';
+import axios from 'axios';
 // import Viewscake from './Viewscake';
 
 const Userdashboard = () => {
@@ -131,6 +132,31 @@ const Userdashboard = () => {
 
 
   // const user = JSON.parse(localStorage.getItem("user"));
+
+
+  const handleLogout = async () => {
+    const storedUser = JSON.parse(localStorage.getItem("UserData"));
+    const userId = storedUser?.id;
+
+    if (!userId) {
+      console.error("User not found in localStorage");
+      localStorage.removeItem("token");
+      localStorage.removeItem("UserData");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      await axios.post("http://localhost:4500/usercake/logout", { userId });
+      console.log("User logged out successfully");
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      localStorage.removeItem("token");
+      localStorage.removeItem("UserData");
+      navigate("/login");
+    }
+  };
 
   const [user, setUser] = useState(null);
 
@@ -239,11 +265,13 @@ const Userdashboard = () => {
 
         <div className="absolute bottom-4 left-2 right-2">
           <button
-            onClick={() => {
-              localStorage.removeItem("token");
-              localStorage.removeItem("UserData");
-              navigate("/login");
-            }}
+            // onClick={() => {
+            //   localStorage.removeItem("token");
+            //   localStorage.removeItem("UserData");
+            //   navigate("/login");
+            // }}
+            onClick={handleLogout}
+
             className={` w-full flex items-center space-x-3 px-3 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors group ${!isSidebarExpanded && !isMobile ? 'justify-center' : ''}`}>
             <LogOut className="h-5 w-5 flex-shrink-0" />
             {(isSidebarExpanded || isMobile) && <span className="text-sm">Logout</span>}

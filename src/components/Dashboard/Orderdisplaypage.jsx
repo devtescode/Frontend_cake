@@ -30,9 +30,46 @@ const Orderdisplaypage = () => {
         fetchOrders();
     }, []);
 
-    //   const handleRemove = (id) => {
-    //     setOrders(orders.filter((order) => order._id !== id));
-    //   };
+
+    const handleRemove = async (orderId) => {
+        try {
+            const result = await Swal.fire({
+                title: "Are you sure?",
+                text: "This order will be permanently deleted!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#f6339a",
+                cancelButtonColor: "#fa333c",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "Cancel",
+            });
+
+            if (result.isConfirmed) {
+                await axios.delete(`http://localhost:4500/usercake/userdeleteorder/${orderId}`);
+
+                setOrders((prev) => prev.filter((order) => order._id !== orderId));
+
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your order has been deleted successfully.",
+                    icon: "success",
+                    timer: 1500,
+                    showConfirmButton: false,
+                });
+            }
+        } catch (error) {
+            console.error("Error deleting order:", error);
+
+            Swal.fire({
+                title: "Error!",
+                text: "Something went wrong while deleting the order.",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+        }
+    };
+
+
 
     const subtotal = orders.reduce((sum, order) => sum + order.price, 0);
 
@@ -46,8 +83,8 @@ const Orderdisplaypage = () => {
 
     if (orders.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center text-center min-h-screen">
-                <p className="text-gray-600 text-lg">You have not placed any orders yet.</p>
+            <div className="flex flex-col items-center justify-center text-center">
+                <p className="text-red-600 text-lg">You have not placed any orders yet.</p>
             </div>
         );
     }
@@ -83,11 +120,12 @@ const Orderdisplaypage = () => {
                                     Sweet Delights
                                 </p>
                                 <button
-                                    //   onClick={() => handleRemove(order._id)}
+                                    onClick={() => handleRemove(order._id)}
                                     className="flex items-center gap-1 text-red-500 text-sm font-medium mt-2"
                                 >
                                     <FaTrashAlt size={14} /> Remove
                                 </button>
+
                             </div>
                         </div>
 
@@ -115,8 +153,6 @@ const Orderdisplaypage = () => {
                     </div>
                 ))}
             </div>
-
-            {/* RIGHT SIDE — CART SUMMARY */}
             <div className="bg-white shadow-sm p-6 h-fit">
                 <h2 className="text-lg font-bold text-gray-900 mb-4">Order SUMMARY</h2>
                 <div className="flex justify-between text-gray-700 font-medium mb-6">
