@@ -79,7 +79,7 @@ const CakesManagement = () => {
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between sm:mt-0 mt-20">
         <h1 className="text-xl md:text-2xl font-bold text-gray-900">Cakes Management</h1>
         <button
           onClick={handleAddCake}

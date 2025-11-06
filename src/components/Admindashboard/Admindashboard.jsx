@@ -138,13 +138,13 @@ const Admindashboard = () => {
     const renderPage = () => {
         switch (activeTab) {
             case 'adminlayout': return <AdminLayout />;
-              case 'Cakes': return <CakesManagement />;
-              case 'UsersManagement': return <UsersManagement/>;
-              case 'Comments': return <CommentsManagement />;
-              case 'Notifications': return <NotificationsManagement />;
-              case 'Settings': return <Settingspage/>;
-              case 'Order': return <AdminDisplayOrder/>;
-              case 'Settled': return <AdminSettledOrders/>;
+            case 'Cakes': return <CakesManagement />;
+            case 'UsersManagement': return <UsersManagement />;
+            case 'Comments': return <CommentsManagement />;
+            case 'Notifications': return <NotificationsManagement />;
+            case 'Settings': return <Settingspage />;
+            case 'Order': return <AdminDisplayOrder />;
+            case 'Settled': return <AdminSettledOrders />;
             //   case 'reviews': return <ReviewsPage />;
             //   case 'notifications': return <NotificationsPage />;
             //   case 'delivery': return <DeliveryPage />;
@@ -169,7 +169,7 @@ const Admindashboard = () => {
     if (!isScreenChecked) return null;
     return (
         <div className="min-h-screen bg-gray-50 flex relative">
-            
+
             <AnimatePresence>
                 {isMobile && isSidebarOpen && (
                     <motion.div
@@ -183,7 +183,7 @@ const Admindashboard = () => {
                 )}
             </AnimatePresence>
 
-           
+
             <motion.div
                 initial={isMobile ? "closed" : "open"}
                 animate={isMobile ? (isSidebarOpen ? "open" : "closed") : "open"}
@@ -193,12 +193,11 @@ const Admindashboard = () => {
                     } bg-white shadow-lg z-50 transition-all duration-300 ${isMobile ? 'w-64 h-full' : ''
                     }`}
             >
-                {/* Sidebar Header */}
                 <div className={`p-4 border-b border-gray-200 ${!isSidebarExpanded && !isMobile ? 'px-2' : ''}`}>
                     <div className="flex items-center justify-between">
                         {(isSidebarExpanded || isMobile) && (
                             <div className="flex items-center space-x-3">
-                        
+
                                 <div className="w-10 h-10 bg-pink-600 text-white rounded-full flex items-center justify-center font-bold">
                                     {user?.fullname ? user.fullname.charAt(0).toUpperCase() : "?"}
                                 </div>
@@ -235,7 +234,7 @@ const Admindashboard = () => {
                     </div>
                 </div>
 
-                
+
                 <nav className="p-2">
                     <ul className="space-y-1">
                         {sidebarItems.map(item => {
@@ -255,7 +254,6 @@ const Admindashboard = () => {
                                         <Icon className="h-5 w-5 flex-shrink-0" />
                                         {(isSidebarExpanded || isMobile) && <span className="text-sm">{item.label}</span>}
 
-                                        {/* Tooltip for collapsed sidebar */}
                                         {!isSidebarExpanded && !isMobile && (
                                             <div className="absolute left-16 bg-gray-800 text-white px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
                                                 {item.label}
@@ -268,9 +266,9 @@ const Admindashboard = () => {
                     </ul>
                 </nav>
 
-               
+
                 <div className="absolute bottom-4 left-2 right-2">
-                   
+
                     <button
                         onClick={() => {
                             localStorage.removeItem("token");
@@ -287,31 +285,38 @@ const Admindashboard = () => {
                             </div>
                         )}
                     </button>
-                    
+
                 </div>
             </motion.div>
 
-        
-            <div className="flex-1 flex flex-col min-h-screen">
-                {/* Top Bar */}
-                <div className="bg-white shadow-sm border-b border-gray-200 p-4 flex items-center justify-between">
-                    <button
-                        onClick={toggleSidebar}
-                        className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                    >
-                        <Menu className="h-5 w-5 text-gray-600" />
-                    </button>
 
-                    <div className="flex items-center space-x-4">
-                        <div className="relative">
-                            <Bell className="h-5 w-5 text-gray-600" />
-                            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">2</span>
+            <div className="flex-1 flex flex-col min-h-screen">
+                {/* Top Navbar */}
+                {!(isMobile && isSidebarOpen) && (
+                    <div
+                        className="bg-white shadow-sm border-b border-gray-200 p-4 flex items-center justify-between
+               fixed top-0 left-0 right-0 z-40 md:relative md:z-auto"
+                    >
+                        <button
+                            onClick={toggleSidebar}
+                            className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                        >
+                            <Menu className="h-5 w-5 text-gray-600" />
+                        </button>
+
+                        <div className="flex items-center space-x-4">
+                            <div className="relative">
+                                <Bell className="h-5 w-5 text-gray-600" />
+                                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                                    2
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
 
-                {/* Page Content */}
-                <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto">
+                {/* Main content area */}
+                <div className="flex-1 p-2 md:p-6 lg:p-8 overflow-auto pt-0 md:pt-0">
                     <motion.div
                         key={activeTab}
                         initial={{ opacity: 0, y: 20 }}
@@ -322,6 +327,7 @@ const Admindashboard = () => {
                         {renderPage()}
                     </motion.div>
                 </div>
+
             </div>
         </div>
     );

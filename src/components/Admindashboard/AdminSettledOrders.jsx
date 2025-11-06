@@ -41,8 +41,8 @@ const AdminSettledOrders = () => {
     }
 
     return (
-        <div className=" bg-gray-50">
-            <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+        <div className=" bg-gray-50 sm:mt-0 mt-20">
+            <h1 className="text-3xl font-bold text-gray-800 mb-4 text-center">
                 Settled Orders
             </h1>
 

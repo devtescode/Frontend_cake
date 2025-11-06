@@ -35,12 +35,11 @@ const AdminDisplayOrder = () => {
                     orders: [],
                     region: order.region,
                     city: order.city,
-                    address: order.address,  
+                    address: order.address,
                     status: order.status,
                 };
             }
-            console.log(orders, "orders");
-            
+
             acc[key].orders.push(order);
             return acc;
         }, {})
@@ -96,7 +95,7 @@ const AdminDisplayOrder = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 p-0">
+        <div className="min-h-screen bg-gray-50 p-0 sm:mt-0 mt-20">
             <h1 className="text-3xl font-bold text-gray-800 mb-3 text-center">
                 Customer Orders
             </h1>
@@ -110,7 +109,7 @@ const AdminDisplayOrder = () => {
                         <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0 w-full">
                             <input
                                 type="text"
-                                placeholder="Search by name, email, phone, city, or region..."
+                                placeholder="Search by name..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="w-full sm:w-80 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -340,7 +339,7 @@ const AdminDisplayOrder = () => {
                             <p>
                                 <strong>City:</strong> {selectedUserOrders.city}
                             </p>
-                           <strong>Address:</strong> {selectedUserOrders.address || "No address provided"}
+                            <strong>Address:</strong> {selectedUserOrders.address || "No address provided"}
                             <p>
                                 <strong>Email:</strong> {selectedUserOrders.user?.email}
                             </p>
