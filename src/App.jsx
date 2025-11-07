@@ -13,6 +13,7 @@ import Cakespage from './components/Dashboard/Cakespage'
 import ProfilePage from './components/Dashboard/ProfilePage'
 import OverviewPage from './components/Dashboard/OverviewPage'
 import Orderdisplaypage from './components/Dashboard/Orderdisplaypage'
+import AdminprotectedRoute from './components/Adminprotectedpage/AdminprotectedRoute'
 
 function App() {
 
@@ -39,7 +40,13 @@ function App() {
         </Route>
 
         <Route path='/adlogin' element={<Adminlogin />} />
-        <Route path='/admindashboard' element={<Admindashboard />} />
+        <Route path='/admindashboard' element={
+          <AdminprotectedRoute>
+            <Admindashboard />
+          </AdminprotectedRoute>
+        }/>
+
+        {/* <Route path='/admindashboard' element={<Admindashboard />} /> */}
 
         <Route path='*' element={<Notfound />} />
       </Routes>

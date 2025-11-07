@@ -271,8 +271,8 @@ const Admindashboard = () => {
 
                     <button
                         onClick={() => {
-                            localStorage.removeItem("token");
-                            localStorage.removeItem("UserData");
+                            localStorage.removeItem("adminToken");
+                            // localStorage.removeItem("UserData");
                             navigate("/adlogin");
                         }}
                         className={` w-full flex items-center space-x-3 px-3 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors group ${!isSidebarExpanded && !isMobile ? 'justify-center' : ''}`}>
