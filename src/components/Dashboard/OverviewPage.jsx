@@ -101,7 +101,7 @@ const OverviewPage = () => {
           <h2 className="text-xl font-semibold text-gray-800">Recent Orders</h2>
           {allOrders.length > 2 && (
             <button
-              className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+              className="text-pink-600 hover:text-pink-700 font-medium text-sm"
               onClick={() => setModalOpen(true)}
             >
               View All
@@ -130,7 +130,7 @@ const OverviewPage = () => {
           exit={{ opacity: 0 }}
         >
           <motion.div
-            className="bg-white w-full max-w-3xl p-6 overflow-y-auto max-h-[80vh] shadow-lg rounded-2xl"
+            className="bg-white w-full max-w-3xl p-4 overflow-y-auto max-h-[80vh] shadow-lg"
             initial={{ y: -50, opacity: 0, scale: 0.95 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: -50, opacity: 0, scale: 0.95 }}
@@ -165,7 +165,7 @@ const OverviewPage = () => {
 };
 
 const StatCard = ({ title, value, icon }) => (
-  <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-200 flex items-center justify-between hover:shadow-md transition-shadow duration-200">
+  <div className="bg-white p-5 md:p-6 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow duration-200">
     <div>
       <p className="text-sm md:text-base opacity-80">{title}</p>
       <p className="text-2xl md:text-3xl font-bold mt-1">{value}</p>
@@ -175,7 +175,7 @@ const StatCard = ({ title, value, icon }) => (
 );
 
 const OrderRow = ({ order }) => (
-  <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200 space-y-3 sm:space-y-0">
+  <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 shadow-sm hover:shadow-md transition-shadow duration-200 space-y-3 sm:space-y-0">
     <div className="flex items-center space-x-4">
       <img src={order.cakeImage} alt={order.name} className="w-12 h-12 rounded-lg object-cover flex-shrink-0" />
       <div className="min-w-0">
