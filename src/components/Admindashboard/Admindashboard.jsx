@@ -41,18 +41,6 @@ import Settingspage from './Settingspage';
 import AdminDisplayOrder from './AdminDisplayOrder';
 import AdminSettledOrders from './AdminSettledOrders';
 
-// Import all page components
-// import AdminLayout from '../AdminLayout';
-// import AdminLayout from './AdminLayout';
-// import ProfilePage from './pages/ProfilePage';
-// import OrdersPage from './pages/OrdersPage';
-// import PaymentsPage from './pages/PaymentsPage';
-// import FavoritesPage from './pages/FavoritesPage';
-// import ReviewsPage from './pages/ReviewsPage';
-// import NotificationsPage from './pages/NotificationsPage';
-// import DeliveryPage from './pages/DeliveryPage';
-// import SettingsPage from './pages/SettingsPage';
-
 const Admindashboard = () => {
     const [activeTab, setActiveTab] = useState('adminlayout');
     const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Always closed by default
@@ -86,7 +74,6 @@ const Admindashboard = () => {
         { id: 'Comments', label: 'Comments', icon: CreditCard },
         { id: 'Notifications', label: 'Notifications', icon: Bell },
         { id: 'Settings', label: 'Settings', icon: Settings },
-        // { id: 'settings', label: 'Settings', icon: Settings }
     ];
 
     const toggleSidebar = () => {
