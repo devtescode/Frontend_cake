@@ -1,162 +1,202 @@
-import React from 'react';
-import { ShoppingBag, DollarSign, Package, Heart } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { X, ShoppingBag, DollarSign, Package, Heart } from "lucide-react";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const OverviewPage = () => {
-  const userInfo = {
-    totalOrders: 12,
-    totalSpent: 485.50,
-    activeOrders: 2,
-    likedCakes: 8
-  };
+  const [userInfo, setUserInfo] = useState({
+    totalOrders: 0,
+    totalSpent: 0,
+    activeOrders: 0,
+    totalQuantity: 0,
+    likedCakes: 0,
+  });
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [allOrders, setAllOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const recentOrders = [
-    {
-      id: 1,
-      cakeImage: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1789&q=80',
-      name: 'Chocolate Birthday Cake',
-      price: 45.99,
-      status: 'Delivered',
-      date: '2024-01-15',
-      statusColor: 'bg-green-100 text-green-800'
-    },
-    {
-      id: 2,
-      cakeImage: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1789&q=80',
-      name: 'Vanilla Wedding Cake',
-      price: 125.00,
-      status: 'Processing',
-      date: '2024-01-20',
-      statusColor: 'bg-blue-100 text-blue-800'
-    },
-    {
-      id: 3,
-      cakeImage: '/api/placeholder/80/80',
-      name: 'Red Velvet Cupcakes',
-      price: 36.00,
-      status: 'Pending',
-      date: '2024-01-22',
-      statusColor: 'bg-yellow-100 text-yellow-800'
-    }
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const storedUser = localStorage.getItem("UserData");
+        if (!storedUser) {
+          navigate("/login");
+          return;
+        }
+
+        const user = JSON.parse(storedUser);
+        const userId = user.id;
+
+        const res = await axios.get(
+          `http://localhost:4500/usercake/getUserDashboard/${userId}`
+        );
+
+        const { totalOrders, totalSpent, activeOrders, totalQuantity, recentOrders } = res.data;
+
+        setUserInfo({
+          totalOrders,
+          totalSpent,
+          activeOrders,
+          totalQuantity,
+          likedCakes: 0,
+        });
+
+        // Show first 3 orders in dashboard
+        setRecentOrders(recentOrders.slice(0, 3));
+        setAllOrders(recentOrders);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, [navigate]);
+
+  if (loading) return <LoadingSkeleton />;
+
+  const stats = [
+    { title: "Total Orders", value: userInfo.totalOrders },
+    { title: "Total Spent", value: `₦${userInfo.totalSpent.toLocaleString()}` },
+    { title: "Total Quantity", value: userInfo.totalQuantity },
+    { title: "Liked Cakes", value: userInfo.likedCakes },
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 px-0 md:px-0 py-2">
+      {/* Header */}
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Dashboard Overview</h1>
-        <p className="text-gray-600 mt-1">Welcome back! Here's what's happening with your orders.</p>
-      </div>
-      
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-        <div className="bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl p-4 md:p-6 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-blue-100 text-sm">Total Orders</p>
-              <p className="text-2xl md:text-3xl font-bold">{userInfo.totalOrders}</p>
-            </div>
-            <ShoppingBag className="h-8 w-8 md:h-12 md:w-12 text-blue-200" />
-          </div>
-        </div>
-        
-        <div className="bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl p-4 md:p-6 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-green-100 text-sm">Total Spent</p>
-              <p className="text-2xl md:text-3xl font-bold">${userInfo.totalSpent}</p>
-            </div>
-            <DollarSign className="h-8 w-8 md:h-12 md:w-12 text-green-200" />
-          </div>
-        </div>
-        
-        <div className="bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl p-4 md:p-6 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-orange-100 text-sm">Active Orders</p>
-              <p className="text-2xl md:text-3xl font-bold">{userInfo.activeOrders}</p>
-            </div>
-            <Package className="h-8 w-8 md:h-12 md:w-12 text-orange-200" />
-          </div>
-        </div>
-        
-        <div className="bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl p-4 md:p-6 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-pink-100 text-sm">Liked Cakes</p>
-              <p className="text-2xl md:text-3xl font-bold">{userInfo.likedCakes}</p>
-            </div>
-            <Heart className="h-8 w-8 md:h-12 md:w-12 text-pink-200" />
-          </div>
-        </div>
+        <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
+        <p className="text-gray-600 mt-1">Welcome back! Here's a quick look at your activity.</p>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-6">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {stats.map((stat, idx) => (
+          <motion.div
+            key={idx}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.1, duration: 0.4 }}
+          >
+            <StatCard {...stat} />
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Recent Orders */}
+      <div className="bg-white p-3">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg md:text-xl font-semibold text-gray-800">Recent Orders</h2>
-          <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
-            View All Orders
-          </button>
+          <h2 className="text-xl font-semibold text-gray-800">Recent Orders</h2>
+          {allOrders.length > 2 && (
+            <button
+              className="text-blue-600 hover:text-blue-700 font-medium text-sm"
+              onClick={() => setModalOpen(true)}
+            >
+              View All
+            </button>
+          )}
         </div>
-        
-        <div className="space-y-4">
-          {recentOrders.map(order => (
-            <div key={order.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gray-50 rounded-lg space-y-3 sm:space-y-0">
-              <div className="flex items-center space-x-4">
-                <img 
-                  src={order.cakeImage} 
-                  alt={order.name} 
-                  className="w-12 h-12 rounded-lg object-cover flex-shrink-0" 
-                />
-                <div className="min-w-0">
-                  <p className="font-medium text-gray-800 truncate">{order.name}</p>
-                  <p className="text-sm text-gray-600">{order.date}</p>
-                </div>
-              </div>
-              <div className="flex items-center justify-between sm:flex-col sm:items-end">
-                <p className="font-semibold text-gray-800">${order.price}</p>
-                <span className={`px-2 py-1 rounded-full text-xs font-medium ${order.statusColor}`}>
-                  {order.status}
-                </span>
-              </div>
+
+        {recentOrders.length === 0 ? (
+          <p className="text-gray-500 text-center py-8">No recent orders found.</p>
+        ) : (
+          <div className="space-y-4">
+            {recentOrders.map(order => (
+              <OrderRow key={order._id} order={order} />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Modal for all orders */}
+      {modalOpen && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.div
+            className="bg-white w-full max-w-3xl p-6 overflow-y-auto max-h-[80vh] shadow-lg"
+            initial={{ y: -50, opacity: 0, scale: 0.95 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: -50, opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.3, type: "spring", stiffness: 120 }}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">All Orders</h2>
+              <button
+                onClick={() => setModalOpen(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X />
+              </button>
             </div>
-          ))}
-        </div>
-      </div>
+            <div className="space-y-4">
+              {allOrders.map(order => (
+                <OrderRow key={order._id} order={order} />
+              ))}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
-          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <ShoppingBag className="h-6 w-6 text-blue-600" />
-          </div>
-          <h3 className="font-semibold text-gray-800 mb-2">Browse Cakes</h3>
-          <p className="text-sm text-gray-600 mb-4">Discover our delicious cake collection</p>
-          <button className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
-            Shop Now
-          </button>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
-          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Package className="h-6 w-6 text-green-600" />
-          </div>
-          <h3 className="font-semibold text-gray-800 mb-2">Track Orders</h3>
-          <p className="text-sm text-gray-600 mb-4">Monitor your active orders</p>
-          <button className="w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition-colors">
-            Track Now
-          </button>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
-          <div className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Heart className="h-6 w-6 text-pink-600" />
-          </div>
-          <h3 className="font-semibold text-gray-800 mb-2">Favorites</h3>
-          <p className="text-sm text-gray-600 mb-4">Reorder your favorite cakes</p>
-          <button className="w-full bg-pink-500 text-white py-2 px-4 rounded-lg hover:bg-pink-600 transition-colors">
-            View Favorites
-          </button>
-        </div>
-      </div>
     </div>
   );
 };
+
+const StatCard = ({ title, value, icon }) => (
+  <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-200 flex items-center justify-between hover:shadow-md transition-shadow duration-200">
+    <div>
+      <p className="text-sm md:text-base opacity-80">{title}</p>
+      <p className="text-2xl md:text-3xl font-bold mt-1">{value}</p>
+    </div>
+    <div className="text-gray-400 text-3xl">{icon}</div>
+  </div>
+);
+
+const OrderRow = ({ order }) => (
+  <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200 space-y-3 sm:space-y-0">
+    <div className="flex items-center space-x-4">
+      <img src={order.cakeImage} alt={order.name} className="w-12 h-12 rounded-lg object-cover flex-shrink-0" />
+      <div className="min-w-0">
+        <p className="font-medium text-gray-800 truncate">{order.name}</p>
+        <p className="text-sm text-gray-500">{new Date(order.createdAt).toLocaleDateString()}</p>
+        <p className="text-sm text-gray-500">Quantity: {order.quantity}</p>
+      </div>
+    </div>
+    <div className="flex items-center justify-between sm:flex-col sm:items-end space-y-1 sm:space-y-2">
+      <p className="font-semibold text-gray-800">₦{(order.price * order.quantity).toLocaleString()}</p>
+      <span className={`px-3 py-1 rounded-full text-xs font-medium ${order.status.toLowerCase() === "delivered"
+          ? "bg-green-100 text-green-800"
+          : order.status.toLowerCase() === "processing"
+            ? "bg-blue-100 text-blue-800"
+            : order.status.toLowerCase() === "pending"
+              ? "bg-yellow-100 text-yellow-800"
+              : "bg-red-100 text-red-800"
+        }`}>
+        {order.status}
+      </span>
+    </div>
+  </div>
+);
+
+const LoadingSkeleton = () => (
+  <div className="flex justify-center items-center h-[70vh]">
+    <div className="animate-pulse space-y-4 w-full max-w-6xl">
+      <div className="h-10 bg-gray-300 rounded-lg w-1/3 mx-auto"></div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+        {Array(4).fill(0).map((_, i) => <div key={i} className="h-28 bg-gray-200 rounded-xl animate-pulse"></div>)}
+      </div>
+      <div className="h-64 bg-gray-200 rounded-xl mt-6 animate-pulse"></div>
+    </div>
+  </div>
+);
 
 export default OverviewPage;
