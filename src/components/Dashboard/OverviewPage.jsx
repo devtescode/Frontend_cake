@@ -134,7 +134,7 @@ const OverviewPage = () => {
             initial={{ y: -50, opacity: 0, scale: 0.95 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: -50, opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.3, type: "spring", stiffness: 120 }}
+            transition={{ duration: 0.3, type: "spring", stiffness: 40 }}
           >
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">All Orders</h2>
