@@ -28,7 +28,7 @@ const ProtectedRoute = ({ children }) => {
           text: "Your session has expired. Please log in again.",
           confirmButtonColor: "#f6339a",
         }).then(() => {
-          navigate("/adlogin", { replace: true });
+          navigate("/login", { replace: true });
         });
 
         setIsValid(false);
