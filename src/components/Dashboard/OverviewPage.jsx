@@ -35,6 +35,8 @@ const OverviewPage = () => {
           `http://localhost:4500/usercake/getUserDashboard/${userId}`
         );
 
+        console.log("Dashboard data:", res.data);
+
         const { totalOrders, totalSpent, activeOrders, totalQuantity, recentOrders } = res.data;
 
         setUserInfo({
@@ -46,8 +48,11 @@ const OverviewPage = () => {
         });
 
         // Show first 3 orders in dashboard
-        setRecentOrders(recentOrders.slice(0, 3));
-        setAllOrders(recentOrders);
+        setRecentOrders(res.data.recentOrders.slice(0, 2)); // first 3
+        setAllOrders(res.data.recentOrders); // all for modal
+
+        // setRecentOrders(recentOrders.slice(0, 2));
+        // setAllOrders(recentOrders);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       } finally {
@@ -61,8 +66,8 @@ const OverviewPage = () => {
   if (loading) return <LoadingSkeleton />;
 
   const stats = [
-    { title: "Total Orders", value: userInfo.totalOrders },
-    { title: "Total Spent", value: `₦${userInfo.totalSpent.toLocaleString()}` },
+    { title: "Total", value: userInfo.totalOrders },
+    { title: "Total Orders", value: `₦${userInfo.totalSpent.toLocaleString()}` },
     { title: "Total Quantity", value: userInfo.totalQuantity },
     { title: "Liked Cakes", value: userInfo.likedCakes },
   ];
@@ -90,6 +95,7 @@ const OverviewPage = () => {
       </div>
 
       {/* Recent Orders */}
+      {/* Recent Orders */}
       <div className="bg-white p-3">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold text-gray-800">Recent Orders</h2>
@@ -114,7 +120,8 @@ const OverviewPage = () => {
         )}
       </div>
 
-      {/* Modal for all orders */}
+
+      {/* Modal for remaining orders */}
       {modalOpen && (
         <motion.div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
@@ -123,7 +130,7 @@ const OverviewPage = () => {
           exit={{ opacity: 0 }}
         >
           <motion.div
-            className="bg-white w-full max-w-3xl p-6 overflow-y-auto max-h-[80vh] shadow-lg"
+            className="bg-white w-full max-w-3xl p-6 overflow-y-auto max-h-[80vh] shadow-lg rounded-2xl"
             initial={{ y: -50, opacity: 0, scale: 0.95 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: -50, opacity: 0, scale: 0.95 }}
@@ -138,14 +145,20 @@ const OverviewPage = () => {
                 <X />
               </button>
             </div>
+
             <div className="space-y-4">
-              {allOrders.map(order => (
-                <OrderRow key={order._id} order={order} />
-              ))}
+              {allOrders
+                .slice(recentOrders.length) // <-- only show remaining orders
+                .map(order => (
+                  <OrderRow key={order._id} order={order} />
+                ))}
             </div>
           </motion.div>
         </motion.div>
       )}
+
+
+
 
     </div>
   );
@@ -174,12 +187,12 @@ const OrderRow = ({ order }) => (
     <div className="flex items-center justify-between sm:flex-col sm:items-end space-y-1 sm:space-y-2">
       <p className="font-semibold text-gray-800">₦{(order.price * order.quantity).toLocaleString()}</p>
       <span className={`px-3 py-1 rounded-full text-xs font-medium ${order.status.toLowerCase() === "delivered"
-          ? "bg-green-100 text-green-800"
-          : order.status.toLowerCase() === "processing"
-            ? "bg-blue-100 text-blue-800"
-            : order.status.toLowerCase() === "pending"
-              ? "bg-yellow-100 text-yellow-800"
-              : "bg-red-100 text-red-800"
+        ? "bg-green-100 text-green-800"
+        : order.status.toLowerCase() === "processing"
+          ? "bg-blue-100 text-blue-800"
+          : order.status.toLowerCase() === "pending"
+            ? "bg-yellow-100 text-yellow-800"
+            : "bg-red-100 text-red-800"
         }`}>
         {order.status}
       </span>
