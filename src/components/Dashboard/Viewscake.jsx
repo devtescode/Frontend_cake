@@ -168,34 +168,25 @@ const Viewscake = () => {
       // console.log(res, "response");
 
 
-      // Swal.fire({
-      //   title: "Order Added!",
-      //   text: "Your order has been successfully added.",
-      //   icon: "success",
-      //   timer: 2000,
-      //   showConfirmButton: false,
-      // });
-
-      // Beautiful toast notification at the bottom
+     
       Swal.fire({
-        toast: true,                // enable toast mode
-        position: 'bottom-end',     // bottom right corner
+        toast: true,                
+        position: 'bottom-end',   
         icon: 'success',
         title: 'Order added successfully!',
         showConfirmButton: false,
-        timer: 10000,               // display for 10 seconds
-        timerProgressBar: true,     // show progress bar
-        background: '#f6339a',      // soft green background
-        color: '#fff',              // white text
+        timer: 10000,              
+        timerProgressBar: true,    
+        background: '#f6339a',     
+        color: '#fff',             
         showClass: {
-          popup: 'animate__animated animate__fadeInUp',    // animate.css fade in
+          popup: 'animate__animated animate__fadeInUp',    
         },
         hideClass: {
-          popup: 'animate__animated animate__fadeOutDown', // fade out
+          popup: 'animate__animated animate__fadeOutDown', 
         }
       });
-      console.log("Order created:", res.data);
-      // Clear delivery selection after successful order
+      // console.log("Order created:", res.data);
       setSelectedRegion("");
       setSelectedCity("");
       setDeliveryAddress("");
