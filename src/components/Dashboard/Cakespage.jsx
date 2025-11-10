@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaSpinner } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { div } from "framer-motion/client";
+import { API_URLS } from "../../utils/apiConfig";
 
 const Cakespage = () => {
     const [cakes, setCakes] = useState([]);
@@ -15,7 +16,7 @@ const Cakespage = () => {
     useEffect(() => {
         const fetchCakes = async () => {
             try {
-                const res = await axios.get("http://localhost:4500/admin/admingetplan");
+                const res = await axios.get(API_URLS.admingetplan);
                 setCakes(res.data.plans);
             } catch (error) {
                 console.log("Error fetching cakes", error);

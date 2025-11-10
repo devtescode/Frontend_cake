@@ -26,6 +26,7 @@ import Cakespage from './Cakespage';
 import Viewscake from './Viewscake';
 import Orderdisplaypage from './Orderdisplaypage';
 import axios from 'axios';
+import { API_URLS } from '../../utils/apiConfig';
 // import Viewscake from './Viewscake';
 
 const Userdashboard = () => {
@@ -147,7 +148,7 @@ const Userdashboard = () => {
     }
 
     try {
-      await axios.post("http://localhost:4500/usercake/logout", { userId });
+      await axios.post(API_URLS.logout , { userId });
       console.log("User logged out successfully");
     } catch (error) {
       console.error("Logout error:", error);

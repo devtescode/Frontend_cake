@@ -4,6 +4,7 @@ import axios from "axios";
 import { Heart, ShoppingCart, Star, Truck, RotateCcw } from "lucide-react"
 import logo from '../../assets/logo.png'
 import { FaSpinner } from "react-icons/fa";
+import { API_URLS } from "../../utils/apiConfig";
 // import ukData from "../../../public/ukData.json";
 
 
@@ -98,7 +99,7 @@ const Viewscake = () => {
   useEffect(() => {
     const fetchCakeDetails = async () => {
       try {
-        const res = await axios.get(`http://localhost:4500/admin/getsingleplan/${id}`);
+        const res = await axios.get(API_URLS.getsingleplan(id));
         setCake(res.data);
       } catch (error) {
         console.log("Error fetching cake:", error);
@@ -156,7 +157,7 @@ const Viewscake = () => {
       setIsSubmitting(true);
       const storedUser = JSON.parse(localStorage.getItem("UserData"));
       const userId = storedUser?.id; // ✅ use .id instead of ._id
-      const res = await axios.post("http://localhost:4500/usercake/useraddorder", {
+      const res = await axios.post( API_URLS.useraddorder, {
         userId,
         planId: cake._id,
         region: selectedRegion,

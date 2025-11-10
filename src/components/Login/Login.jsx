@@ -5,6 +5,7 @@ import { z } from "zod";
 import { CheckCircle, AlertCircle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URLS } from "../../utils/apiConfig";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -43,7 +44,7 @@ const Login = () => {
     try {
       setErrorMessage(""); // clear previous errors
       setLoading(true);
-      const res = await axios.post("http://localhost:4500/usercake/login", data);
+      const res = await axios.post(API_URLS.userlogin , data);
 
       // ✅ check the response message
       if (res.data && res.data.message === "Login successful") {

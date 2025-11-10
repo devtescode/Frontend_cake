@@ -5,6 +5,7 @@ import { z } from "zod";
 import { CheckCircle, AlertCircle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URLS } from "../../utils/apiConfig";
 
 const schema = z.object({
     fullname: z
@@ -71,7 +72,7 @@ const Register = () => {
         try {
             setErrorMessage("");
             setLoading(true);
-            const res = await axios.post("http://localhost:4500/usercake/register", data);
+            const res = await axios.post(API_URLS.register , data);
             // console.log("✅ Signup success:", res.data);
             const Toast = Swal.mixin({
                 toast: true,

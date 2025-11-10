@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaSpinner, FaTrashAlt } from "react-icons/fa";
+import { API_URLS } from "../../utils/apiConfig";
 
 const Orderdisplaypage = () => {
     const [orders, setOrders] = useState([]);
@@ -18,7 +19,7 @@ const Orderdisplaypage = () => {
                     return;
                 }
 
-                const res = await axios.get(`http://localhost:4500/usercake/getuserorders/${userId}`);
+                const res = await axios.get(API_URLS.getuserorders(userId));
                 setOrders(res.data.orders || []);
             } catch (error) {
                 console.error("Error fetching orders:", error);
@@ -34,7 +35,7 @@ const Orderdisplaypage = () => {
     const handleIncrement = async (orderId, currentQuantity) => {
         const newQuantity = currentQuantity + 1;
         try {
-            await axios.put(`http://localhost:4500/usercake/updatequantity/${orderId}`, {
+            await axios.put(API_URLS.updatequantity(orderId), {
                 quantity: newQuantity,
             });
 
@@ -54,7 +55,7 @@ const Orderdisplaypage = () => {
         const newQuantity = currentQuantity - 1;
 
         try {
-            await axios.put(`http://localhost:4500/usercake/updatequantity/${orderId}`, {
+            await axios.put(API_URLS.updatequantity(orderId), {
                 quantity: newQuantity,
             });
 
@@ -84,7 +85,7 @@ const Orderdisplaypage = () => {
             });
 
             if (result.isConfirmed) {
-                await axios.delete(`http://localhost:4500/usercake/userdeleteorder/${orderId}`);
+                await axios.delete(API_URLS.userdeleteorder(orderId));
 
                 setOrders((prev) => prev.filter((order) => order._id !== orderId));
 
