@@ -3,6 +3,7 @@ import axios from "axios";
 import { X, ShoppingBag, DollarSign, Package, Heart } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { API_URLS } from "../../utils/apiConfig";
 
 const OverviewPage = () => {
   const [userInfo, setUserInfo] = useState({
@@ -32,7 +33,7 @@ const OverviewPage = () => {
         const userId = user.id;
 
         const res = await axios.get(
-          `http://localhost:4500/usercake/getUserDashboard/${userId}`
+          API_URLS.getUserDashboard(userId)
         );
 
         console.log("Dashboard data:", res.data);

@@ -24,4 +24,5 @@ export const API_URLS = {
     delivered: (orderId) => `${baseURL}/admin/orders/${orderId}/delivered`,  
     deliveredgroup: `${baseURL}/admin/deliveredgroup`,
     settledorders: `${baseURL}/admin/settledorders`,
+    getUserDashboard: (userId) => `${baseURL}/usercake/getUserDashboard/${userId}`,
 };
