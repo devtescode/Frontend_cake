@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import Modal from '../Modal';
 import CakeForm from '../CakeForm';
 import { FaSpinner } from "react-icons/fa"; // nice spinning icon
+import { API_URLS } from '../../utils/apiConfig';
 
 const CakesManagement = () => {
   const [cakes, setCakes] = useState([]);
@@ -23,7 +24,7 @@ const CakesManagement = () => {
   const fetchCakes = async () => {
     try {
       setLoading(true); // start loader
-      const res = await axios.get("http://localhost:4500/admin/admingetplan");
+      const res = await axios.get(API_URLS.admingetplan)
       setCakes(res.data.plans);
       setLoading(false); // stop loader
     } catch (error) {
@@ -61,7 +62,7 @@ const CakesManagement = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`http://localhost:4500/admin/admindelete/${id}`);
+          await axios.delete(API_URLS.admindelete(id));
           fetchCakes();
           Swal.fire("Deleted!", "Cake has been deleted.", "success");
         } catch (error) {

@@ -4,6 +4,7 @@ import axios from "axios";
 import StatsCard from "../StatsCard";
 import RevenueChart from "../RevenueChart";
 import RecentOrders from "../RecentOrders";
+import { API_URLS } from "../../utils/apiConfig";
 
 const AdminLayout = () => {
   const [stats, setStats] = useState(null);
@@ -12,7 +13,7 @@ const AdminLayout = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axios.get("http://localhost:4500/admin/getdashboardstatus");
+        const res = await axios.get(API_URLS.getdashboardstatus);
         setStats(res.data);
       } catch (err) {
         console.error("Error fetching dashboard stats:", err);

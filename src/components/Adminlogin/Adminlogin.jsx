@@ -8,6 +8,7 @@ import * as z from "zod";
 // import { AlertCircle, CheckCircle, User, Lock, Mail } from "lucide-react";
 import { FaUser, FaLock, FaEnvelope } from "react-icons/fa";
 import { AlertCircle, CheckCircle } from "lucide-react";
+import { API_URLS } from "../../utils/apiConfig";
 
 // Validation Schema
 // const createAdminSchema = z.object({
@@ -69,7 +70,7 @@ const Adminlogin = () => {
     useEffect(() => {
         const checkAdmin = async () => {
             try {
-                const res = await axios.get("http://localhost:4500/admin/check");
+                const res = await axios.get(API_URLS.check);
                 setAdminExists(res.data.exists);
             } catch (err) {
                 console.error("Error checking admin:", err);
@@ -84,7 +85,7 @@ const Adminlogin = () => {
             setLoading(true);
             if (!adminExists) {
                 const { confirmPassword, ...payload } = data;
-                const res = await axios.post("http://localhost:4500/admin/create", payload);
+                const res = await axios.post(API_URLS.create , payload);
                 // Swal.fire("Success", "Admin created successfully!", "success");
                 const Toast = Swal.mixin({
                     toast: true,
@@ -105,7 +106,7 @@ const Adminlogin = () => {
                 setAdminExists(true);
                 reset();
             } else {
-                const res = await axios.post("http://localhost:4500/admin/login", data);
+                const res = await axios.post(API_URLS.adminlogin, data);
                 // Swal.fire("Welcome Admin 🚀", "Login successful", "success");
                 const Toast = Swal.mixin({
                     toast: true,

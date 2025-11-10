@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { API_URLS } from "../utils/apiConfig";
 // import Swal from "sweetalert2";
 
 const CakeForm = ({ cake, onCancel, onSave }) => {
@@ -51,7 +52,7 @@ const CakeForm = ({ cake, onCancel, onSave }) => {
     try {
       setLoading(true);
       if (cake) {
-        await axios.put(`http://localhost:4500/admin/adminupdate/${cake._id}`, data, {
+        await axios.put(API_URLS.adminupdate(cake._id), data, {
           headers: { "Content-Type": "multipart/form-data" },
         });
 
@@ -66,7 +67,7 @@ const CakeForm = ({ cake, onCancel, onSave }) => {
         });
       } else {
         // ✅ CREATE (Add new cake)
-        await axios.post("http://localhost:4500/admin/admincreateplan", data, {
+        await axios.post(API_URLS.admincreateplan, data, {
           headers: { "Content-Type": "multipart/form-data" },
         });
 
