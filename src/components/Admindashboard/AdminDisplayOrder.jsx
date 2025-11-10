@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaSpinner } from "react-icons/fa";
+import { API_URLS } from "../../utils/apiConfig";
 
 const AdminDisplayOrder = () => {
     const [orders, setOrders] = useState([]);
@@ -11,7 +12,7 @@ const AdminDisplayOrder = () => {
 
     const fetchOrders = async () => {
         try {
-            const res = await axios.get("http://localhost:4500/usercake/getallorders");
+            const res = await axios.get(API_URLS.getallorders);
             const pendingOrders = res.data.filter((order) => order.status !== "Delivered");
             setOrders(pendingOrders);
         } catch (err) {
@@ -77,7 +78,8 @@ const AdminDisplayOrder = () => {
 
         if (result.isConfirmed) {
             try {
-                await axios.put(`http://localhost:4500/admin/orders/${orderId}/delivered`);
+                // `http://localhost:4500/admin/orders/${orderId}/delivered`
+                await axios.put(API_URLS.delivered(orderId));
                 Swal.fire("Success", "Order moved to Settled Orders.", "success");
 
                 // ✅ Remove from current list immediately
@@ -313,7 +315,7 @@ const AdminDisplayOrder = () => {
 
                                     if (result.isConfirmed) {
                                         try {
-                                            await axios.put("http://localhost:4500/admin/deliveredgroup", {
+                                            await axios.put(API_URLS.deliveredgroup, {
                                                 orderIds: selectedIds,
                                             });
 

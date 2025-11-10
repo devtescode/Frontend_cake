@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { FaSpinner } from "react-icons/fa";
+import { API_URLS } from "../../utils/apiConfig";
 
 const UsersManagement = () => {
   const [users, setUsers] = useState([]);
@@ -12,7 +13,7 @@ const UsersManagement = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("http://localhost:4500/admin/admingetallusers");
+        const res = await axios.get(API_URLS.admingetallusers);
         setUsers(res.data);
       } catch (err) {
         console.error("Error fetching users:", err);

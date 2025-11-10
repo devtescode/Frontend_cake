@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaSpinner } from "react-icons/fa";
+import { API_URLS } from "../../utils/apiConfig";
 
 const AdminSettledOrders = () => {
     const [settledOrders, setSettledOrders] = useState([]);
@@ -10,7 +11,7 @@ const AdminSettledOrders = () => {
     useEffect(() => {
         const fetchSettledOrders = async () => {
             try {
-                const res = await axios.get("http://localhost:4500/admin/settledorders");
+                const res = await axios.get(API_URLS.settledorders);
                 setSettledOrders(res.data);
             } catch (error) {
                 console.error("Error fetching settled orders:", error);

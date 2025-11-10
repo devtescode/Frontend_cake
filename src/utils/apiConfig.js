@@ -19,4 +19,9 @@ export const API_URLS = {
     admindelete: (id) => `${baseURL}/admin/admindelete/${id}`,
     adminupdate: (id) => `${baseURL}/admin/adminupdate/${id}`,
     admincreateplan: `${baseURL}/admin/admincreateplan`,
+    admingetallusers: `${baseURL}/admin/admingetallusers`,
+    getallorders: `${baseURL}/usercake/getallorders`,
+    delivered: (orderId) => `${baseURL}/admin/orders/${orderId}/delivered`,  
+    deliveredgroup: `${baseURL}/admin/deliveredgroup`,
+    settledorders: `${baseURL}/admin/settledorders`,
 };
