@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Newsletter = () => {
   const [email, setEmail] = useState('');
@@ -47,12 +48,13 @@ const Newsletter = () => {
                 <p className="text-lg md:text-xl text-gray-100 mb-6 max-w-xl">
                   Get exclusive offers and cake inspiration for every occasion.
                 </p>
-                <a
-                  href="/shop"
+                <Link to="/login">
+                <p
                   className="bg-pink-600 hover:bg-pink-700 text-white font-semibold py-3 px-8 rounded-full shadow-md transition duration-300"
                 >
                   Shop Now
-                </a>
+                </p>
+                </Link>
               </div>
             </div>
 

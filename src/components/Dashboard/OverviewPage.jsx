@@ -67,21 +67,18 @@ const OverviewPage = () => {
   if (loading) return <LoadingSkeleton />;
 
   const stats = [
-    { title: "Total", value: userInfo.totalOrders },
-    { title: "Total Orders", value: `₦${userInfo.totalSpent.toLocaleString()}` },
-    { title: "Total Quantity", value: userInfo.totalQuantity },
-    { title: "Liked Cakes", value: userInfo.likedCakes },
+    { title: "Total", value: userInfo.totalOrders, icon: <ShoppingBag />, color: "from-pink-500 to-rose-400"  },
+    { title: "Total Orders", value: `₦${userInfo.totalSpent.toLocaleString()}` , icon: "₦", color: "from-emerald-500 to-green-400" },
+    { title: "Total Quantity", value: userInfo.totalQuantity, icon: <Package />, color: "from-blue-500 to-indigo-400" },
+    { title: "Liked Cakes", value: userInfo.likedCakes,  icon: <Heart />, color: "from-yellow-500 to-orange-400" },
   ];
 
   return (
     <div className="space-y-5 px-0 md:px-0 py-2">
-      {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
         <p className="text-gray-600 mt-1">Welcome back! Here's a quick look at your activity.</p>
       </div>
-
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
         {stats.map((stat, idx) => (
           <motion.div
@@ -95,8 +92,7 @@ const OverviewPage = () => {
         ))}
       </div>
 
-      {/* Recent Orders */}
-      {/* Recent Orders */}
+     
       <div className="bg-white p-3">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold text-gray-800">Recent Orders</h2>
@@ -122,7 +118,6 @@ const OverviewPage = () => {
       </div>
 
 
-      {/* Modal for remaining orders */}
       {modalOpen && (
         <motion.div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
@@ -149,7 +144,7 @@ const OverviewPage = () => {
 
             <div className="space-y-4">
               {allOrders
-                .slice(recentOrders.length) // <-- only show remaining orders
+                .slice(recentOrders.length)
                 .map(order => (
                   <OrderRow key={order._id} order={order} />
                 ))}
