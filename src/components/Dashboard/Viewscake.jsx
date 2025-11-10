@@ -157,7 +157,7 @@ const Viewscake = () => {
       setIsSubmitting(true);
       const storedUser = JSON.parse(localStorage.getItem("UserData"));
       const userId = storedUser?.id; // ✅ use .id instead of ._id
-      const res = await axios.post( API_URLS.useraddorder, {
+      const res = await axios.post(API_URLS.useraddorder, {
         userId,
         planId: cake._id,
         region: selectedRegion,
@@ -165,18 +165,40 @@ const Viewscake = () => {
         address: deliveryAddress,
       });
 
-      console.log(res, "response");
+      // console.log(res, "response");
 
 
+      // Swal.fire({
+      //   title: "Order Added!",
+      //   text: "Your order has been successfully added.",
+      //   icon: "success",
+      //   timer: 2000,
+      //   showConfirmButton: false,
+      // });
+
+      // Beautiful toast notification at the bottom
       Swal.fire({
-        title: "Order Added!",
-        text: "Your order has been successfully added.",
-        icon: "success",
-        timer: 2000,
+        toast: true,                // enable toast mode
+        position: 'bottom-end',     // bottom right corner
+        icon: 'success',
+        title: 'Order added successfully!',
         showConfirmButton: false,
+        timer: 10000,               // display for 10 seconds
+        timerProgressBar: true,     // show progress bar
+        background: '#f6339a',      // soft green background
+        color: '#fff',              // white text
+        showClass: {
+          popup: 'animate__animated animate__fadeInUp',    // animate.css fade in
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutDown', // fade out
+        }
       });
-
       console.log("Order created:", res.data);
+      // Clear delivery selection after successful order
+      setSelectedRegion("");
+      setSelectedCity("");
+      setDeliveryAddress("");
     } catch (error) {
       console.error("Error saving order:", error);
       Swal.fire("Error", "Unable to add order. Please try again.", "error");
@@ -304,14 +326,14 @@ const Viewscake = () => {
                         <p className="font-semibold text-gray-900 text-sm">WhatsApp on 07034501354 To Place Your Order</p>
                       </div>
                     </div>
-                    {/* <div className="flex gap-3 items-start">
+                    <div className="flex gap-3 items-start">
                       <span className="text-orange-500 text-xl">⭐</span>
                       <div>
                         <p className="font-semibold text-gray-900 text-sm">
-                          Enjoy cheaper shipping fees when you select a PickUp Station at checkout.
+                          Enjoy cheaper delivery fees when you select a PickUp Nearby.
                         </p>
                       </div>
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               </div>
