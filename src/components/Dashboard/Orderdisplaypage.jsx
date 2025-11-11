@@ -110,7 +110,7 @@ const Orderdisplaypage = () => {
     };
 
 
-    const handleCheckout = async () => {
+    const handleCheckout = async (currency = "NGN") => {
         try {
             const storedUser = JSON.parse(localStorage.getItem("UserData"));
             const email = storedUser?.email;
@@ -120,10 +120,21 @@ const Orderdisplaypage = () => {
                 return;
             }
 
+            // Validate currency: currently only NGN is active
+            const supportedCurrencies = ["NGN"]; // Add "GBP" later when activated
+            if (!supportedCurrencies.includes(currency)) {
+                Swal.fire(
+                    "Currency not supported",
+                    `Currently only ${supportedCurrencies.join(", ")} is supported`,
+                    "info"
+                );
+                currency = "NGN"; // fallback
+            }
+
             const response = await axios.post(API_URLS.payments, {
                 email,
                 amount: subtotal,
-                currency: "GBP" // or "NGN"
+                currency, // currency will be NGN for now
             });
 
             const { authorization_url } = response.data.data;
@@ -131,11 +142,10 @@ const Orderdisplaypage = () => {
             // Redirect to Paystack payment page
             window.location.href = authorization_url;
         } catch (error) {
-            console.error("Payment initialization failed:", error);
+            console.error("Payment initialization failed:", error.response?.data || error.message);
             Swal.fire("Error", "Unable to initialize payment", "error");
         }
     };
-
 
 
 
