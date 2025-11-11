@@ -67,10 +67,10 @@ const OverviewPage = () => {
   if (loading) return <LoadingSkeleton />;
 
   const stats = [
-    { title: "Total", value: userInfo.totalOrders, icon: <ShoppingBag />, color: "from-pink-500 to-rose-400"  },
-    { title: "Total Orders", value: `₦${userInfo.totalSpent.toLocaleString()}` , icon: "₦", color: "from-emerald-500 to-green-400" },
+    { title: "Total", value: userInfo.totalOrders, icon: <ShoppingBag />, color: "from-pink-500 to-rose-400" },
+    { title: "Total Orders", value: `₦${userInfo.totalSpent.toLocaleString()}`, icon: "₦", color: "from-emerald-500 to-green-400" },
     { title: "Total Quantity", value: userInfo.totalQuantity, icon: <Package />, color: "from-blue-500 to-indigo-400" },
-    { title: "Liked Cakes", value: userInfo.likedCakes,  icon: <Heart />, color: "from-yellow-500 to-orange-400" },
+    { title: "Liked Cakes", value: userInfo.likedCakes, icon: <Heart />, color: "from-yellow-500 to-orange-400" },
   ];
 
   return (
@@ -92,7 +92,7 @@ const OverviewPage = () => {
         ))}
       </div>
 
-     
+
       <div className="bg-white p-3">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold text-gray-800">Recent Orders</h2>
@@ -180,19 +180,19 @@ const OrderRow = ({ order }) => (
         <p className="text-sm text-gray-500">Quantity: {order.quantity}</p>
       </div>
     </div>
-    <div className="flex items-center justify-between sm:flex-col sm:items-end space-y-1 sm:space-y-2">
-      <p className="font-semibold text-gray-800">₦{(order.price * order.quantity).toLocaleString()}</p>
-      <span className={`px-3 py-1 rounded-full text-xs font-medium ${order.status.toLowerCase() === "delivered"
+      <span className={`px-3 py-1 rounded-full text-xs font-medium ${order.status.toLowerCase() === "success"
         ? "bg-green-100 text-green-800"
-        : order.status.toLowerCase() === "processing"
-          ? "bg-blue-100 text-blue-800"
-          : order.status.toLowerCase() === "pending"
-            ? "bg-yellow-100 text-yellow-800"
-            : "bg-red-100 text-red-800"
+        : order.status.toLowerCase() === "delivered"
+          ? "bg-green-100 text-green-800"
+          : order.status.toLowerCase() === "processing"
+            ? "bg-blue-100 text-blue-800"
+            : order.status.toLowerCase() === "pending"
+              ? "bg-yellow-100 text-yellow-800"
+              : "bg-red-100 text-red-800"
         }`}>
         {order.status}
       </span>
-    </div>
+
   </div>
 );
 
