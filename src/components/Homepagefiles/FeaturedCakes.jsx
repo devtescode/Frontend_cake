@@ -105,9 +105,9 @@ const FeaturedCakes = () => {
                 <p className="font-bold text-primary-dark text-lg mb-3">£{cake.price}</p>
 
                 <div className="flex justify-between items-center">
-                  <a href={`/product/${cake.id}`} className="text-sm font-medium hover:text-primary-dark transition-colors">
+                  <p className="text-sm font-medium hover:text-primary-dark transition-colors">
                     View Details
-                  </a>
+                  </p>
                   <button className="btn btn-primary py-1.5 px-4 flex items-center text-sm">
                     <FaShoppingCart className="mr-1" /> Add to Cart
                   </button>
