@@ -117,10 +117,10 @@ const Footer = () => {
                   <span className="text-gray-800 font-bold text-xs">MASTER</span>
                 </div>
                 <div className="bg-white rounded px-2 py-1">
-                  <span className="text-gray-800 font-bold text-xs">PAYPAL</span>
+                  <span className="text-gray-800 font-bold text-xs">VERVE</span>
                 </div>
                 <div className="bg-white rounded px-2 py-1">
-                  <span className="text-gray-800 font-bold text-xs">APPLE PAY</span>
+                  <span className="text-gray-800 font-bold text-xs">TRANSFAR</span>
                 </div>
               </div>
             </div>
