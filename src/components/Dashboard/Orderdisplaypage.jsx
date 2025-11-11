@@ -110,6 +110,34 @@ const Orderdisplaypage = () => {
     };
 
 
+    const handleCheckout = async () => {
+        try {
+            const storedUser = JSON.parse(localStorage.getItem("UserData"));
+            const email = storedUser?.email;
+
+            if (!email) {
+                Swal.fire("Login Required", "Please log in to continue", "warning");
+                return;
+            }
+
+            const response = await axios.post(API_URLS.payments, {
+                email,
+                amount: subtotal,
+                currency: "GBP" // or "NGN"
+            });
+
+            const { authorization_url } = response.data.data;
+
+            // Redirect to Paystack payment page
+            window.location.href = authorization_url;
+        } catch (error) {
+            console.error("Payment initialization failed:", error);
+            Swal.fire("Error", "Unable to initialize payment", "error");
+        }
+    };
+
+
+
 
     // const subtotal = orders.reduce((sum, order) => sum + order.price, 0);
     const subtotal = orders.reduce((sum, order) => sum + order.price * order.quantity, 0);
@@ -211,7 +239,7 @@ const Orderdisplaypage = () => {
                     </div>
                 ))}
             </div>
-            
+
             <div className="bg-white shadow-sm p-6 h-fit">
                 <h2 className="text-lg font-bold text-gray-900 mb-4">Order SUMMARY</h2>
                 <div className="flex justify-between text-gray-700 font-medium mb-6">
@@ -219,6 +247,7 @@ const Orderdisplaypage = () => {
                     <span>₦ {subtotal.toLocaleString()}</span>
                 </div>
                 <button
+                    onClick={handleCheckout}
                     className="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 rounded-md transition-all"
                 >
                     Checkout (₦ {subtotal.toLocaleString()})

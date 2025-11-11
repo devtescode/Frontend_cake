@@ -25,4 +25,5 @@ export const API_URLS = {
     deliveredgroup: `${baseURL}/admin/deliveredgroup`,
     settledorders: `${baseURL}/admin/settledorders`,
     getUserDashboard: (userId) => `${baseURL}/usercake/getUserDashboard/${userId}`,
+    payments: `${baseURL}/payments/initialize`,
 };

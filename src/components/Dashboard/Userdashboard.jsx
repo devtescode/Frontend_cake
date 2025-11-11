@@ -71,7 +71,6 @@ const Userdashboard = () => {
     { id: 'favorites', label: 'Favorites', icon: Heart },
     { id: 'reviews', label: 'Reviews', icon: MessageSquare },
     { id: 'notifications', label: 'Notifications', icon: Bell },
-    // { id: 'delivery', label: 'Delivery Info', icon: MapPin },
     { id: 'settings', label: 'Settings', icon: Settings }
   ];
 
