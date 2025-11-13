@@ -216,7 +216,7 @@ const Orderdisplaypage = () => {
                 </p>
 
                 {/* ✅ Payment Status */}
-                <p className="mt-1">
+                {/* <p className="mt-1">
                   {order.isPaid ? (
                     <span className="text-green-600 font-semibold text-sm">
                       ✅ Paid Successfully
@@ -226,17 +226,35 @@ const Orderdisplaypage = () => {
                       ⏳ Make Payment
                     </span>
                   )}
-                </p>
+                </p> */}
+
+                <span
+                  className={`inline-block mt-1 px-3 py-1 text-xs font-semibold rounded-full
+  ${order.status === "Delivered"
+                      ? "bg-green-100 text-green-700"
+                      : order.status === "Awaiting Payment"
+                        ? "bg-orange-100 text-orange-700"
+                        : order.isPaid
+                          ? "bg-blue-100 text-blue-700"
+                          : "bg-yellow-100 text-yellow-700"
+                    }`}
+                >
+                  {order.isPaid
+                    ? order.status === "Delivered"
+                      ? "Paid & Delivered"
+                      : "Paid (Awaiting Delivery)"
+                    : "Pending Payment"}
+                </span>
+
 
                 {/* ❌ Remove Button */}
                 <button
                   onClick={() => handleRemove(order._id, order.isPaid)}
                   disabled={order.isPaid}
-                  className={`flex items-center gap-1 text-sm font-medium mt-2 ${
-                    order.isPaid
+                  className={`flex items-center gap-1 text-sm font-medium mt-2 ${order.isPaid
                       ? "text-gray-400 cursor-not-allowed"
                       : "text-red-500 hover:text-red-600"
-                  }`}
+                    }`}
                 >
                   <FaTrashAlt size={14} /> Remove
                 </button>
@@ -256,11 +274,10 @@ const Orderdisplaypage = () => {
                     handleDecrement(order._id, order.quantity, order.isPaid)
                   }
                   disabled={order.isPaid}
-                  className={`px-2 py-0 rounded ${
-                    order.isPaid
+                  className={`px-2 py-0 rounded ${order.isPaid
                       ? "bg-gray-300 cursor-not-allowed"
                       : "bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold"
-                  }`}
+                    }`}
                 >
                   -
                 </button>
@@ -272,11 +289,10 @@ const Orderdisplaypage = () => {
                     handleIncrement(order._id, order.quantity, order.isPaid)
                   }
                   disabled={order.isPaid}
-                  className={`px-2 py-0 rounded ${
-                    order.isPaid
+                  className={`px-2 py-0 rounded ${order.isPaid
                       ? "bg-gray-300 cursor-not-allowed"
                       : "bg-pink-500 text-white hover:bg-pink-600"
-                  }`}
+                    }`}
                 >
                   +
                 </button>

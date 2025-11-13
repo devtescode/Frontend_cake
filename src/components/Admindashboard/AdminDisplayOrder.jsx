@@ -26,7 +26,7 @@ const AdminDisplayOrder = () => {
         fetchOrders();
     }, []);
 
-    // ✅ Group orders by user + region + city
+    // Group orders by user + region + city
     const groupedOrders = Object.values(
         orders.reduce((acc, order) => {
             const key = `${order.userId?._id}_${order.region}_${order.city}`;
@@ -37,19 +37,14 @@ const AdminDisplayOrder = () => {
                     region: order.region,
                     city: order.city,
                     address: order.address,
-                    status: order.status,
-                    quantity: order.quantity,
                 };
             }
-            // console.log(order, "key");
-
-
             acc[key].orders.push(order);
             return acc;
         }, {})
     );
 
-    // ✅ Filter by search and status
+    // Filter by search and status
     const filteredOrders = groupedOrders.filter((group) => {
         const user = group.user || {};
         const matchesSearch =
@@ -58,14 +53,21 @@ const AdminDisplayOrder = () => {
             user.phonenumber?.includes(searchTerm) ||
             group.city?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             group.region?.toLowerCase().includes(searchTerm.toLowerCase());
+
         const matchesStatus =
             statusFilter === "All" ||
             group.orders.some((o) => o.status === statusFilter);
+
         return matchesSearch && matchesStatus;
     });
 
-    // ✅ Handle Delivery Confirmation
-    const handleDeliveryStatus = async (orderId) => {
+    // Single delivery
+    const handleDeliveryStatus = async (order) => {
+        if (!order.isPaid) {
+            Swal.fire("Cannot Deliver", "This order has not been paid yet.", "warning");
+            return;
+        }
+
         const result = await Swal.fire({
             title: "Confirm Delivery",
             text: "Has this order been delivered successfully?",
@@ -78,14 +80,11 @@ const AdminDisplayOrder = () => {
 
         if (result.isConfirmed) {
             try {
-                // `http://localhost:4500/admin/orders/${orderId}/delivered`
-                await axios.put(API_URLS.delivered(orderId));
+                await axios.put(API_URLS.delivered(order._id));
                 Swal.fire("Success", "Order moved to Settled Orders.", "success");
-
-                // ✅ Remove from current list immediately
-                setOrders((prev) => prev.filter((order) => order._id !== orderId));
-            } catch (error) {
-                console.error(error);
+                setOrders((prev) => prev.filter((o) => o._id !== order._id));
+            } catch (err) {
+                console.error(err);
                 Swal.fire("Error", "Failed to update delivery status.", "error");
             }
         }
@@ -93,7 +92,7 @@ const AdminDisplayOrder = () => {
 
     if (loading) {
         return (
-            <div className=" py-20 flex justify-center items-center h-[60vh] text-lg font-medium text-gray-600">
+            <div className="py-20 flex justify-center items-center h-[60vh] text-lg font-medium text-gray-600">
                 <FaSpinner className="animate-spin text-4xl text-pink-500" />
             </div>
         );
@@ -107,8 +106,6 @@ const AdminDisplayOrder = () => {
 
             {/* Search and Filter */}
             <div className="bg-white sm:p-4 mb-6 w-[100%] mx-auto md:w-full">
-
-
                 <div className="bg-white rounded-lg shadow-sm p-4 mb-3 w-[100%] mx-auto md:w-full">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
                         <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-3 sm:space-y-0 w-full">
@@ -125,13 +122,11 @@ const AdminDisplayOrder = () => {
                                 className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             >
                                 <option value="All">All Status</option>
-                                <option value="Pending">Pending</option>
+                                <option value="isPaid">Paid</option>
                             </select>
                         </div>
                     </div>
                 </div>
-
-
 
                 {/* Orders Table */}
                 {filteredOrders.length === 0 ? (
@@ -145,7 +140,6 @@ const AdminDisplayOrder = () => {
                                 <thead className="bg-blue-50 text-gray-600 uppercase text-xs font-semibold">
                                     <tr>
                                         <th className="px-0 py-2 whitespace-nowrap">Customer</th>
-                                        {/* <th className="px-0 py-2 whitespace-nowrap">Phone</th> */}
                                         <th className="px-0 py-2 text-center whitespace-nowrap">Status</th>
                                         <th className="px-0 py-2 text-center whitespace-nowrap">Orders</th>
                                         <th className="px-0 py-2 text-center whitespace-nowrap">Action</th>
@@ -161,26 +155,25 @@ const AdminDisplayOrder = () => {
                                             <td className="px-1 py-2 font-semibold text-gray-800 truncate max-w-[80px]">
                                                 {group.user?.fullname}
                                             </td>
-                                            {/* <td className="px-1 py-2 truncate max-w-[80px]">
-                                            {group.user?.phonenumber}
-                                        </td> */}
                                             <td className="px-1 py-2 text-center">
                                                 <span
-                                                    className={`inline-block px-2 py-1 text-xs font-semibold rounded-full ${group.status === "Pending"
-                                                        ? "bg-yellow-100 text-yellow-700"
-                                                        : group.status === "Approved"
-                                                            ? "bg-green-100 text-green-700"
-                                                            : group.status === "Cancelled"
-                                                                ? "bg-red-100 text-red-700"
-                                                                : "bg-gray-100 text-gray-700"
+                                                    className={`inline-block px-2 py-1 text-xs font-semibold rounded-full ${group.orders.every((o) => !o.isPaid)
+                                                            ? "bg-red-100 text-red-700"        // all unpaid
+                                                            : group.orders.every((o) => o.isPaid)
+                                                                ? "bg-green-100 text-green-700"    // all paid
+                                                                : "bg-orange-100 text-orange-700"  // partially paid
                                                         }`}
                                                 >
-                                                    {group.status}
+                                                    {group.orders.every((o) => !o.isPaid)
+                                                        ? "Awaiting Payment"
+                                                        : group.orders.every((o) => o.isPaid)
+                                                            ? "Paid"
+                                                            : "Partially Paid"}
                                                 </span>
                                             </td>
-                                            <td className="px-1 py-2 text-center">
-                                                {group.orders.length}
-                                            </td>
+
+
+                                            <td className="px-1 py-2 text-center">{group.orders.length}</td>
                                             <td className="px-1 py-2 text-center">
                                                 <button
                                                     onClick={() => setSelectedUserOrders(group)}
@@ -191,18 +184,15 @@ const AdminDisplayOrder = () => {
                                             </td>
                                             <td className="px-1 py-2 text-center relative group">
                                                 <button
-                                                    onClick={() => handleDeliveryStatus(group.orders[0]._id)}
-                                                    disabled={group.orders.length > 1}
-                                                    className={`px-2 py-1 text-white rounded-md text-xs font-semibold transition 
-                    ${group.orders.length > 1
-                                                            ? "bg-gray-400 cursor-not-allowed"
-                                                            : "bg-orange-600 hover:bg-orange-700"
+                                                    onClick={() => handleDeliveryStatus(group.orders[0])}
+                                                    disabled={group.orders.length > 1 || !group.orders[0].isPaid}
+                                                    className={`px-2 py-1 text-white rounded-md text-xs font-semibold transition ${group.orders.length > 1 || !group.orders[0].isPaid
+                                                        ? "bg-gray-400 cursor-not-allowed"
+                                                        : "bg-orange-600 hover:bg-orange-700"
                                                         }`}
                                                 >
                                                     Delivered
                                                 </button>
-
-                                                {/* Tooltip */}
                                                 {group.orders.length > 1 && (
                                                     <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded-md px-2 py-1 opacity-0 group-hover:opacity-100 transition">
                                                         Open View to Deliver
@@ -216,9 +206,7 @@ const AdminDisplayOrder = () => {
                         </div>
                     </div>
                 )}
-
             </div>
-
 
             {/* Modal */}
             {selectedUserOrders && (
@@ -241,18 +229,15 @@ const AdminDisplayOrder = () => {
                                     key={i}
                                     className="flex items-center space-x-4 border-b pb-3 last:border-none"
                                 >
-                                    {/* ✅ Add Checkbox */}
                                     <input
                                         type="checkbox"
                                         checked={order.selected || false}
+                                        disabled={!order.isPaid} // ✅ cannot select unpaid
                                         onChange={(e) => {
                                             const updatedOrders = selectedUserOrders.orders.map((o, idx) =>
                                                 idx === i ? { ...o, selected: e.target.checked } : o
                                             );
-                                            setSelectedUserOrders({
-                                                ...selectedUserOrders,
-                                                orders: updatedOrders,
-                                            });
+                                            setSelectedUserOrders({ ...selectedUserOrders, orders: updatedOrders });
                                         }}
                                         className="w-4 h-4 accent-green-600"
                                     />
@@ -270,36 +255,36 @@ const AdminDisplayOrder = () => {
                                         <p className="text-xs text-gray-500">
                                             Ordered: {new Date(order.createdAt).toLocaleDateString()}
                                         </p>
-                                        <p className="text-xs text-gray-500">
-                                            Quantity: {order.quantity}
-                                        </p>
+                                        <p className="text-xs text-gray-500">Quantity: {order.quantity}</p>
                                         <span
-                                            className={`inline-block mt-1 px-3 py-1 text-xs font-semibold rounded-full ${order.status === "Pending"
-                                                ? "bg-yellow-100 text-yellow-700"
-                                                : order.status === "Approved"
+                                            className={`inline-block mt-1 px-3 py-1 text-xs font-semibold rounded-full ${order.isPaid
+                                                ? order.status === "Delivered"
                                                     ? "bg-green-100 text-green-700"
-                                                    : order.status === "Cancelled"
-                                                        ? "bg-red-100 text-red-700"
-                                                        : "bg-gray-100 text-gray-700"
+                                                    : "bg-green-100 text-green-700"
+                                                : "bg-red-100 text-red-700"
                                                 }`}
                                         >
-                                            {order.status}
+                                            {order.isPaid ? order.status : "Awaiting Payment"}
                                         </span>
                                     </div>
                                 </div>
                             ))}
                         </div>
 
-                        {/* ✅ Delivery Button */}
+                        {/* Bulk Delivery Button */}
                         <div className="mt-6 text-center">
                             <button
                                 onClick={async () => {
                                     const selectedIds = selectedUserOrders.orders
-                                        .filter((o) => o.selected)
+                                        .filter((o) => o.selected && o.isPaid)
                                         .map((o) => o._id);
 
                                     if (selectedIds.length === 0) {
-                                        Swal.fire("No Selection", "Please select at least one order.", "warning");
+                                        Swal.fire(
+                                            "No Selection",
+                                            "Please select at least one paid order.",
+                                            "warning"
+                                        );
                                         return;
                                     }
 
@@ -315,21 +300,21 @@ const AdminDisplayOrder = () => {
 
                                     if (result.isConfirmed) {
                                         try {
-                                            await axios.put(API_URLS.deliveredgroup, {
-                                                orderIds: selectedIds,
-                                            });
+                                            await axios.put(API_URLS.deliveredgroup, { orderIds: selectedIds });
 
-                                            Swal.fire("Delivered!", "Selected orders have been delivered.", "success");
+                                            Swal.fire(
+                                                "Delivered!",
+                                                "Selected orders have been delivered.",
+                                                "success"
+                                            );
 
-                                            // Remove delivered orders from state
                                             setOrders((prev) =>
                                                 prev.filter((order) => !selectedIds.includes(order._id))
                                             );
 
-                                            // Close modal
                                             setSelectedUserOrders(null);
-                                        } catch (error) {
-                                            console.error(error);
+                                        } catch (err) {
+                                            console.error(err);
                                             Swal.fire("Error", "Failed to update delivery status.", "error");
                                         }
                                     }
@@ -340,6 +325,7 @@ const AdminDisplayOrder = () => {
                             </button>
                         </div>
 
+                        {/* User Info */}
                         <div className="mt-4 text-sm text-gray-600 border-t pt-3">
                             <p>
                                 <strong>Region:</strong> {selectedUserOrders.region}
@@ -347,7 +333,9 @@ const AdminDisplayOrder = () => {
                             <p>
                                 <strong>City:</strong> {selectedUserOrders.city}
                             </p>
-                            <strong>Address:</strong> {selectedUserOrders.address || "No address provided"}
+                            <p>
+                                <strong>Address:</strong> {selectedUserOrders.address || "No address provided"}
+                            </p>
                             <p>
                                 <strong>Email:</strong> {selectedUserOrders.user?.email}
                             </p>
@@ -361,7 +349,6 @@ const AdminDisplayOrder = () => {
                     </div>
                 </div>
             )}
-
         </div>
     );
 };
