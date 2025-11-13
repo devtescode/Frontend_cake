@@ -243,7 +243,7 @@ const Orderdisplaypage = () => {
                     ? order.status === "Delivered"
                       ? "Paid & Delivered"
                       : "Paid (Awaiting Delivery)"
-                    : "Pending Payment"}
+                    : "Make Payment"}
                 </span>
 
 
