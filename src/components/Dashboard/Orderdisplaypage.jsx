@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaSpinner, FaTrashAlt } from "react-icons/fa";
+import { FaMoneyCheck, FaSpinner, FaTrashAlt } from "react-icons/fa";
 import { API_URLS } from "../../utils/apiConfig";
 
 const Orderdisplaypage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // 🧠 Fetch user orders
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -32,7 +34,8 @@ const Orderdisplaypage = () => {
   }, []);
 
   // ➕ Increment quantity
-  const handleIncrement = async (orderId, currentQuantity) => {
+  const handleIncrement = async (orderId, currentQuantity, isPaid) => {
+    if (isPaid) return; // Disable increment if paid
     const newQuantity = currentQuantity + 1;
     try {
       await axios.put(API_URLS.updatequantity(orderId), {
@@ -50,10 +53,9 @@ const Orderdisplaypage = () => {
   };
 
   // ➖ Decrement quantity
-  const handleDecrement = async (orderId, currentQuantity) => {
-    if (currentQuantity <= 1) return;
+  const handleDecrement = async (orderId, currentQuantity, isPaid) => {
+    if (isPaid || currentQuantity <= 1) return; // Disable decrement if paid
     const newQuantity = currentQuantity - 1;
-
     try {
       await axios.put(API_URLS.updatequantity(orderId), {
         quantity: newQuantity,
@@ -70,7 +72,9 @@ const Orderdisplaypage = () => {
   };
 
   // ❌ Remove order
-  const handleRemove = async (orderId) => {
+  const handleRemove = async (orderId, isPaid) => {
+    if (isPaid) return; // Disable remove if paid
+
     try {
       const result = await Swal.fire({
         title: "Are you sure?",
@@ -108,9 +112,10 @@ const Orderdisplaypage = () => {
     }
   };
 
-  // 💳 Checkout ALL Orders at once
+  // 💳 Checkout ALL unpaid Orders
   const handleCheckoutAll = async () => {
     try {
+      setIsSubmitting(true);
       const storedUser = JSON.parse(localStorage.getItem("UserData"));
       const email = storedUser?.email;
 
@@ -119,13 +124,16 @@ const Orderdisplaypage = () => {
         return;
       }
 
-      if (orders.length === 0) {
-        Swal.fire("No Orders", "You don't have any orders to pay for.", "info");
+      // ✅ Filter only unpaid orders
+      const unpaidOrders = orders.filter((order) => !order.isPaid);
+
+      if (unpaidOrders.length === 0) {
+        Swal.fire("All Paid", "You have no unpaid orders to pay for.", "info");
         return;
       }
 
-      // Calculate total amount
-      const totalAmount = orders.reduce(
+      // ✅ Calculate total for unpaid orders
+      const totalAmount = unpaidOrders.reduce(
         (sum, order) => sum + order.price * order.quantity,
         0
       );
@@ -134,7 +142,7 @@ const Orderdisplaypage = () => {
         email,
         amount: Number(totalAmount),
         currency: "NGN",
-        metadata: { allOrders: orders.map((o) => o._id) },
+        metadata: { allOrders: unpaidOrders.map((o) => o._id) },
       };
 
       console.log("Payment Data Sent:", paymentData);
@@ -148,19 +156,19 @@ const Orderdisplaypage = () => {
 
       window.location.href = authorization_url;
     } catch (error) {
-      console.error(
-        "Payment initialization failed:",
-        error.response?.data || error.message
-      );
+      console.error("Payment initialization failed:", error);
       Swal.fire("Error", "Unable to initialize payment", "error");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const subtotal = orders.reduce(
-    (sum, order) => sum + order.price * order.quantity,
-    0
-  );
+  // 🧮 Subtotal (only unpaid)
+  const subtotal = orders
+    .filter((o) => !o.isPaid)
+    .reduce((sum, order) => sum + order.price * order.quantity, 0);
 
+  // 🌀 Loading State
   if (loading) {
     return (
       <div className="py-20 flex justify-center items-center h-[60vh] text-lg font-medium text-gray-600">
@@ -169,10 +177,13 @@ const Orderdisplaypage = () => {
     );
   }
 
+  // 🚫 No Orders
   if (orders.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center text-center">
-        <p className="text-red-600 text-lg">You have not placed any orders yet.</p>
+        <p className="text-red-600 text-lg">
+          You have not placed any orders yet.
+        </p>
       </div>
     );
   }
@@ -203,26 +214,53 @@ const Orderdisplaypage = () => {
                 <p className="text-sm text-gray-500">
                   {order.region}, {order.city}
                 </p>
-                <p className="text-orange-600 text-xs font-semibold mt-1">
-                  Sweet Delights
+
+                {/* ✅ Payment Status */}
+                <p className="mt-1">
+                  {order.isPaid ? (
+                    <span className="text-green-600 font-semibold text-sm">
+                      ✅ Paid Successfully
+                    </span>
+                  ) : (
+                    <span className="text-yellow-500 font-semibold text-sm">
+                      ⏳ Make Payment
+                    </span>
+                  )}
                 </p>
+
+                {/* ❌ Remove Button */}
                 <button
-                  onClick={() => handleRemove(order._id)}
-                  className="flex items-center gap-1 text-red-500 text-sm font-medium mt-2"
+                  onClick={() => handleRemove(order._id, order.isPaid)}
+                  disabled={order.isPaid}
+                  className={`flex items-center gap-1 text-sm font-medium mt-2 ${
+                    order.isPaid
+                      ? "text-gray-400 cursor-not-allowed"
+                      : "text-red-500 hover:text-red-600"
+                  }`}
                 >
                   <FaTrashAlt size={14} /> Remove
                 </button>
               </div>
             </div>
 
+            {/* QUANTITY & PRICE */}
             <div className="mt-4 sm:mt-0 text-right">
               <p className="text-lg font-bold text-gray-900">
                 ₦ {order.price.toLocaleString()}
               </p>
+
+              {/* Quantity Buttons */}
               <div className="mt-2 text-lg font-bold text-gray-900">
                 <button
-                  onClick={() => handleDecrement(order._id, order.quantity)}
-                  className="px-2 py-0 bg-gray-200 rounded hover:bg-gray-300 text-gray-700 font-bold"
+                  onClick={() =>
+                    handleDecrement(order._id, order.quantity, order.isPaid)
+                  }
+                  disabled={order.isPaid}
+                  className={`px-2 py-0 rounded ${
+                    order.isPaid
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold"
+                  }`}
                 >
                   -
                 </button>
@@ -230,8 +268,15 @@ const Orderdisplaypage = () => {
                   {order.quantity}
                 </span>
                 <button
-                  onClick={() => handleIncrement(order._id, order.quantity)}
-                  className="px-2 py-0 bg-pink-500 text-white rounded hover:bg-pink-600"
+                  onClick={() =>
+                    handleIncrement(order._id, order.quantity, order.isPaid)
+                  }
+                  disabled={order.isPaid}
+                  className={`px-2 py-0 rounded ${
+                    order.isPaid
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-pink-500 text-white hover:bg-pink-600"
+                  }`}
                 >
                   +
                 </button>
@@ -250,9 +295,19 @@ const Orderdisplaypage = () => {
         </div>
         <button
           onClick={handleCheckoutAll}
-          className="w-full bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 rounded-md transition-all"
+          disabled={isSubmitting || subtotal === 0}
+          className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 mb-6 transition-colors disabled:opacity-70"
         >
-          Checkout All (₦ {subtotal.toLocaleString()})
+          {isSubmitting ? (
+            <>
+              <FaSpinner className="animate-spin" /> Processing...
+            </>
+          ) : (
+            <>
+              <FaMoneyCheck size={20} /> Checkout All (₦{" "}
+              {subtotal.toLocaleString()})
+            </>
+          )}
         </button>
       </div>
     </div>
