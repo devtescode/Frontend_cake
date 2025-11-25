@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Camera, Edit3, Save, X } from 'lucide-react';
+import { API_URLS } from '../../utils/apiConfig';
 
 const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -27,7 +28,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const res = await axios.get(`http://localhost:4500/usercake/userprofileupdate/${userId}`);
+        const res = await axios.get(API_URLS.userprofileupdate(userId));
         setProfile(res.data.profile);
         setStats(res.data.stats);
       } catch (error) {
@@ -56,7 +57,7 @@ const ProfilePage = () => {
       formData.append("bio", profile.bio);
       if (imageFile) formData.append("profileImage", imageFile);
 
-      await axios.put(`http://localhost:4500/usercake/updateprofile/${userId}`, formData, {
+      await axios.put(API_URLS.updateprofile(userId), formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
 
@@ -93,19 +94,34 @@ const ProfilePage = () => {
 
       {/* Profile Info */}
       <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 mb-8 pb-8 border-b border-gray-200">
-        <div className="relative">
-          <img
-            src={profile.profileImage || "/api/placeholder/120/120"}
-            alt="Profile"
-            className="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-gray-200"
-          />
+        <div className="relative w-24 h-24 md:w-32 md:h-32">
+          {/* Avatar or first letter */}
+          {profile.profileImage ? (
+            <img
+              src={profile.profileImage}
+              alt="Profile"
+              className="w-full h-full rounded-full object-cover border-4 border-gray-200"
+            />
+          ) : (
+            <div className="w-full h-full rounded-full border-4 border-gray-200 bg-gray-200 flex items-center justify-center text-gray-700 text-2xl md:text-4xl font-bold">
+              {profile.fullName && profile.fullName.charAt(0).toUpperCase()}
+            </div>
+          )}
+
+          {/* Camera icon for editing */}
           {isEditing && (
-            <label className="absolute bottom-0 right-0 bg-blue-500 text-white p-2 rounded-full cursor-pointer hover:bg-blue-600">
+            <label className="absolute bottom-0 right-0 z-50 bg-blue-500 text-white p-2 rounded-full cursor-pointer hover:bg-blue-600 flex items-center justify-center">
               <Camera className="h-4 w-4" />
-              <input type="file" name="profileImage" className="hidden" onChange={handleImageChange} />
+              <input
+                type="file"
+                name="profileImage"
+                className="hidden"
+                onChange={handleImageChange}
+              />
             </label>
           )}
         </div>
+
         <div className="text-center sm:text-left">
           <h2 className="text-xl md:text-2xl font-semibold text-gray-800">{profile.fullName}</h2>
           <p className="text-gray-600">Account Created: {new Date(profile.createdAt).toLocaleDateString()}</p>
@@ -139,7 +155,7 @@ const ProfilePage = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           ) : (
-            <p className="px-4 py-2 bg-gray-50 rounded-lg text-gray-800">{profile.address}</p>
+            <p className="px-4 py-2 bg-gray-50 rounded-lg text-gray-800">{profile.address || "No Address yet"}</p>
           )}
         </div>
         <div className="lg:col-span-2">
@@ -152,7 +168,7 @@ const ProfilePage = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           ) : (
-            <p className="px-4 py-2 bg-gray-50 rounded-lg text-gray-800">{profile.bio || "No bio yet"}</p>
+            <p className="px-4 py-2 bg-gray-50 rounded-lg text-gray-800">{profile.bio || "No Bio yet"}</p>
           )}
         </div>
       </div>

@@ -26,4 +26,6 @@ export const API_URLS = {
     settledorders: `${baseURL}/admin/settledorders`,
     getUserDashboard: (userId) => `${baseURL}/usercake/getUserDashboard/${userId}`,
     payments: `${baseURL}/payments/initialize`,
+    userprofileupdate: (userId) => `${baseURL}/usercake/userprofileupdate/${userId}`,
+    updateprofile: (userId) => `${baseURL}/usercake/updateprofile/${userId}`,
 };
