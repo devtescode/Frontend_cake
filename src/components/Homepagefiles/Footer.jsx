@@ -17,16 +17,16 @@ const Footer = () => {
               Crafting delicious moments since 2010. We specialize in custom cakes for all occasions, made with love and the finest ingredients.
             </p>
             <div className="flex space-x-4">
-              <a href="https://facebook.com" className="text-gray-400 hover:text-primary transition-colors">
+              <a  className="text-gray-400 hover:text-primary transition-colors">
                 <FaFacebook size={20} />
               </a>
-              <a href="https://instagram.com" className="text-gray-400 hover:text-primary transition-colors">
+              <a  className="text-gray-400 hover:text-primary transition-colors">
                 <FaInstagram size={20} />
               </a>
-              <a href="https://pinterest.com" className="text-gray-400 hover:text-primary transition-colors">
+              <a className="text-gray-400 hover:text-primary transition-colors">
                 <FaPinterest size={20} />
               </a>
-              <a href="https://twitter.com" className="text-gray-400 hover:text-primary transition-colors">
+              <a className="text-gray-400 hover:text-primary transition-colors">
                 <FaTwitter size={20} />
               </a>
             </div>
@@ -37,19 +37,19 @@ const Footer = () => {
             <h4 className="text-lg font-medium mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li>
-                <a href="/about" className="text-gray-400 hover:text-primary transition-colors">About Us</a>
+                <a className="text-gray-400 hover:text-primary transition-colors">About Us</a>
               </li>
               <li>
-                <a href="/shop" className="text-gray-400 hover:text-primary transition-colors">Shop</a>
+                <a  className="text-gray-400 hover:text-primary transition-colors">Shop</a>
               </li>
               <li>
-                <a href="/faq" className="text-gray-400 hover:text-primary transition-colors">FAQs</a>
+                <a className="text-gray-400 hover:text-primary transition-colors">FAQs</a>
               </li>
               <li>
-                <a href="/delivery" className="text-gray-400 hover:text-primary transition-colors">Delivery Information</a>
+                <a  className="text-gray-400 hover:text-primary transition-colors">Delivery Information</a>
               </li>
               <li>
-                <a href="/contact" className="text-gray-400 hover:text-primary transition-colors">Contact Us</a>
+                <a  className="text-gray-400 hover:text-primary transition-colors">Contact Us</a>
               </li>
             </ul>
           </div>
@@ -126,7 +126,7 @@ const Footer = () => {
             </div>
             
             <div>
-              <a href="/app" className="flex items-center bg-white text-gray-800 rounded-lg px-4 py-2 hover:bg-gray-100 transition-colors">
+              <a  className="flex items-center bg-white text-gray-800 rounded-lg px-4 py-2 hover:bg-gray-100 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
                 </svg>
@@ -142,9 +142,9 @@ const Footer = () => {
             &copy; {currentYear} Sweet Delights. All rights reserved.
           </p>
           <div className="flex justify-center space-x-4 mt-2">
-            <a href="/privacy" className="text-xs text-gray-500 hover:text-primary transition-colors">Privacy Policy</a>
-            <a href="/terms" className="text-xs text-gray-500 hover:text-primary transition-colors">Terms of Service</a>
-            <a href="/cookies" className="text-xs text-gray-500 hover:text-primary transition-colors">Cookie Policy</a>
+            <a className="text-xs text-gray-500 hover:text-primary transition-colors">Privacy Policy</a>
+            <a className="text-xs text-gray-500 hover:text-primary transition-colors">Terms of Service</a>
+            <a className="text-xs text-gray-500 hover:text-primary transition-colors">Cookie Policy</a>
           </div>
         </div>
       </div>
