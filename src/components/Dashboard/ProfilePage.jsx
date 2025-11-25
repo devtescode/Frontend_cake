@@ -73,13 +73,13 @@ const ProfilePage = () => {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Profile Settings</h1>
         {!isEditing ? (
-          <button onClick={() => setIsEditing(true)} className="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-600">
+          <button onClick={() => setIsEditing(true)} className="bg-pink-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-pink-600">
             <Edit3 className="h-4 w-4" />
             <span>Edit Profile</span>
           </button>
         ) : (
           <div className="flex space-x-2">
-            <button onClick={handleSave} className="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-green-600">
+            <button onClick={handleSave} className="bg-pink-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-pink-600">
               <Save className="h-4 w-4" />
               <span>Save</span>
             </button>
