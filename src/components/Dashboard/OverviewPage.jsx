@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { X, ShoppingBag, DollarSign, Package, Heart } from "lucide-react";
+import { X, ShoppingBag, Package, Heart } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { API_URLS } from "../../utils/apiConfig";
 
 const OverviewPage = () => {
   const [userInfo, setUserInfo] = useState({
-    totalOrders: 0,
-    totalSpent: 0,
-    activeOrders: 0,
-    totalQuantity: 0,
+    totalOrders: 0,        // paid quantity
+    totalSpent: 0,         // paid amount
+    totalQuantity: 0,      // pending quantity
+    pendingAmount: 0,      // pending amount
     likedCakes: 0,
   });
+
   const [recentOrders, setRecentOrders] = useState([]);
   const [allOrders, setAllOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,28 +33,23 @@ const OverviewPage = () => {
         const user = JSON.parse(storedUser);
         const userId = user.id;
 
-        const res = await axios.get(
-          API_URLS.getUserDashboard(userId)
-        );
+        const res = await axios.get(API_URLS.getUserDashboard(userId));
 
         console.log("Dashboard data:", res.data);
 
-        const { totalOrders, totalSpent, activeOrders, totalQuantity, recentOrders } = res.data;
+        const { totalOrders, totalSpent, totalQuantity, pendingAmount, recentOrders } = res.data;
 
         setUserInfo({
-          totalOrders,
-          totalSpent,
-          activeOrders,
-          totalQuantity,
+          totalOrders,     // Paid quantity
+          totalSpent,      // Paid amount
+          totalQuantity,   // Pending quantity
+          pendingAmount,   // Pending money
           likedCakes: 0,
         });
 
-        // Show first 3 orders in dashboard
-        setRecentOrders(res.data.recentOrders.slice(0, 2)); // first 3
-        setAllOrders(res.data.recentOrders); // all for modal
+        setRecentOrders(recentOrders.slice(0, 2));
+        setAllOrders(recentOrders);
 
-        // setRecentOrders(recentOrders.slice(0, 2));
-        // setAllOrders(recentOrders);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       } finally {
@@ -66,19 +62,46 @@ const OverviewPage = () => {
 
   if (loading) return <LoadingSkeleton />;
 
+  // UPDATED STATS TO MATCH BACKEND
   const stats = [
-    { title: "Total", value: userInfo.totalOrders, icon: <ShoppingBag />, color: "from-pink-500 to-rose-400" },
-    { title: "Total Orders", value: `₦${userInfo.totalSpent.toLocaleString()}`, icon: "₦", color: "from-emerald-500 to-green-400" },
-    { title: "Total Quantity", value: userInfo.totalQuantity, icon: <Package />, color: "from-blue-500 to-indigo-400" },
-    { title: "Liked Cakes", value: userInfo.likedCakes, icon: <Heart />, color: "from-yellow-500 to-orange-400" },
+    { 
+      title: "Paid Quantity", 
+      value: userInfo.totalOrders, 
+      icon: <ShoppingBag />, 
+      color: "from-pink-500 to-rose-400" 
+    },
+
+    { 
+      title: "Paid Amount", 
+      value: `₦${userInfo.totalSpent.toLocaleString()}`, 
+      icon: "₦", 
+      color: "from-emerald-500 to-green-400" 
+    },
+
+    { 
+      title: "Pending Quantity", 
+      value: userInfo.totalQuantity, 
+      icon: <Package />, 
+      color: "from-blue-500 to-indigo-400" 
+    },
+
+    { 
+      title: "Pending Amount", 
+      value: `₦${userInfo.pendingAmount.toLocaleString()}`, 
+      icon: "₦", 
+      color: "from-yellow-500 to-orange-400" 
+    },
   ];
 
   return (
     <div className="space-y-5 px-0 md:px-0 py-2">
+      
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
         <p className="text-gray-600 mt-1">Welcome back! Here's a quick look at your activity.</p>
       </div>
+
+      {/* STATS GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
         {stats.map((stat, idx) => (
           <motion.div
@@ -92,10 +115,11 @@ const OverviewPage = () => {
         ))}
       </div>
 
-
+      {/* RECENT ORDERS */}
       <div className="bg-white p-3">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold text-gray-800">Recent Orders</h2>
+
           {allOrders.length > 2 && (
             <button
               className="text-pink-600 hover:text-pink-700 font-medium text-sm"
@@ -117,45 +141,33 @@ const OverviewPage = () => {
         )}
       </div>
 
-
+      {/* MODAL */}
       {modalOpen && (
         <motion.div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
         >
           <motion.div
             className="bg-white w-full max-w-3xl p-4 overflow-y-auto max-h-[80vh] shadow-lg"
             initial={{ y: -50, opacity: 0, scale: 0.95 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: -50, opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.3, type: "spring", stiffness: 40 }}
           >
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">All Orders</h2>
-              <button
-                onClick={() => setModalOpen(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
+              <button onClick={() => setModalOpen(false)} className="text-gray-500 hover:text-gray-700">
                 <X />
               </button>
             </div>
 
             <div className="space-y-4">
-              {allOrders
-                .slice(recentOrders.length)
-                .map(order => (
-                  <OrderRow key={order._id} order={order} />
-                ))}
+              {allOrders.map(order => (
+                <OrderRow key={order._id} order={order} />
+              ))}
             </div>
           </motion.div>
         </motion.div>
       )}
-
-
-
-
     </div>
   );
 };
@@ -173,26 +185,27 @@ const StatCard = ({ title, value, icon }) => (
 const OrderRow = ({ order }) => (
   <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 shadow-sm hover:shadow-md transition-shadow duration-200 space-y-3 sm:space-y-0">
     <div className="flex items-center space-x-4">
-      <img src={order.cakeImage} alt={order.name} className="w-12 h-12 rounded-lg object-cover flex-shrink-0" />
-      <div className="min-w-0">
-        <p className="font-medium text-gray-800 truncate">{order.name}</p>
+      <img src={order.cakeImage} alt={order.name} className="w-12 h-12 rounded-lg object-cover" />
+      <div>
+        <p className="font-medium text-gray-800">{order.name}</p>
         <p className="text-sm text-gray-500">{new Date(order.createdAt).toLocaleDateString()}</p>
         <p className="text-sm text-gray-500">Quantity: {order.quantity}</p>
       </div>
     </div>
-      <span className={`px-3 py-1 rounded-full text-xs font-medium ${order.status.toLowerCase() === "success"
-        ? "bg-green-100 text-green-800"
-        : order.status.toLowerCase() === "delivered"
+
+    <span
+      className={`px-3 py-1 rounded-full text-xs font-medium ${
+        order.status.toLowerCase() === "success" || order.status.toLowerCase() === "delivered"
           ? "bg-green-100 text-green-800"
           : order.status.toLowerCase() === "processing"
-            ? "bg-blue-100 text-blue-800"
-            : order.status.toLowerCase() === "pending"
-              ? "bg-yellow-100 text-yellow-800"
-              : "bg-red-100 text-red-800"
-        }`}>
-        {order.status}
-      </span>
-
+          ? "bg-blue-100 text-blue-800"
+          : order.status.toLowerCase() === "pending"
+          ? "bg-yellow-100 text-yellow-800"
+          : "bg-red-100 text-red-800"
+      }`}
+    >
+      {order.status}
+    </span>
   </div>
 );
 
@@ -201,9 +214,9 @@ const LoadingSkeleton = () => (
     <div className="animate-pulse space-y-4 w-full max-w-6xl">
       <div className="h-10 bg-gray-300 rounded-lg w-1/3 mx-auto"></div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-        {Array(4).fill(0).map((_, i) => <div key={i} className="h-28 bg-gray-200 rounded-xl animate-pulse"></div>)}
+        {Array(4).fill(0).map((_, i) => <div key={i} className="h-28 bg-gray-200 rounded-xl"></div>)}
       </div>
-      <div className="h-64 bg-gray-200 rounded-xl mt-6 animate-pulse"></div>
+      <div className="h-64 bg-gray-200 rounded-xl mt-6"></div>
     </div>
   </div>
 );
