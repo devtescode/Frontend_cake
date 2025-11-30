@@ -59,6 +59,10 @@ const UsersManagement = () => {
     return matchesSearch && matchesStatus;
   });
 
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
+
   return (
     <div className="space-y-3 p-3 sm:p-6 ">
       {/* Header */}
@@ -138,32 +142,48 @@ const UsersManagement = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.05 }}
-                    className="hover:bg-gray-50 sm:table-row flex flex-col sm:flex-row sm:items-center sm:justify-between border-b sm:border-0 px-4 sm:px-0 py-3 sm:py-0"
-                  >
-                    {/* User Info */}
-                    <td className="sm:px-6 py-2 flex items-center gap-3">
-                      <div className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center text-white font-medium uppercase">
-                        {user.fullname?.charAt(0) || "?"}
+                    className="
+                                 hover:bg-gray-50 
+                                 flex flex-col 
+                                 sm:table-row 
+                                 px-4 sm:px-0 
+                                 py-3
+                               "
+                    >
+                    {/* USER */}
+                    <td className="sm:table-cell sm:px-6 py-2 flex items-center gap-3 align-middle">
+                      <div className="w-10 h-10 min-w-10 min-h-10 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
+                        {user.profileImage ? (
+                          <img
+                            src={user.profileImage}
+                            alt="User"
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-pink-500 text-white font-medium uppercase">
+                            {user.fullname?.charAt(0)}
+                          </div>
+                        )}
                       </div>
+
                       <div>
                         <div className="text-gray-900 font-medium">{user.fullname}</div>
-                        <div className="sm:hidden text-gray-500 text-xs">{user.email}</div>
                       </div>
                     </td>
 
-                    {/* Contact Info */}
-                    <td className="sm:px-6 py-2 hidden sm:table-cell">
+                    {/* CONTACT */}
+                    <td className="hidden sm:table-cell sm:px-6 py-2 align-middle">
                       <div className="text-gray-900">{user.email}</div>
                       <div className="text-gray-500 text-xs">{user.phonenumber}</div>
                     </td>
 
-                    {/* Joined */}
-                    <td className="sm:px-6 py-2 text-gray-500 text-xs sm:text-sm">
+                    {/* JOINED */}
+                    <td className="sm:table-cell sm:px-6 py-2 text-gray-500 text-xs sm:text-sm align-middle">
                       {new Date(user.createdAt).toLocaleDateString()}
                     </td>
 
-                    {/* Status */}
-                    <td className="sm:px-0 py-2">
+                    {/* STATUS */}
+                    <td className="sm:table-cell sm:px-6 py-2 align-middle">
                       <div className="flex justify-center items-center">
                         {user.isActive ? (
                           <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
@@ -177,24 +197,116 @@ const UsersManagement = () => {
                       </div>
                     </td>
 
-                    {/* Actions */}
-                    <td className="sm:px-6 py-2 flex justify-end sm:justify-start gap-2">
-                      <button className="text-indigo-600 hover:text-indigo-900 text-sm">
+                    {/* ACTIONS */}
+                    <td className="sm:table-cell sm:px-6 py-2 align-middle">
+                      <button
+                        className="text-indigo-600 hover:text-indigo-900 text-sm font-medium transition-all"
+                        onClick={() => {
+                          setSelectedUser(user);
+                          setShowModal(true);
+                        }}
+                      >
                         View
                       </button>
-                      {/* <button
-                        className={`${user.isActive
-                          ? "text-red-600 hover:text-red-900"
-                          : "text-green-600 hover:text-green-900"
-                          } text-sm`}
-                      >
-                        {user.isActive ? "Deactivate" : "Activate"}
-                      </button> */}
                     </td>
                   </motion.tr>
+
                 ))
               )}
             </tbody>
+
+            {/* <button
+                    className={`${user.isActive
+                    ? "text-red-600 hover:text-red-900"
+                    : "text-green-600 hover:text-green-900"
+                    } text-sm`}
+                    >
+                    {user.isActive ? "Deactivate" : "Activate"}
+                    </button>
+            {/* USER DETAILS MODAL */}
+            {showModal && selectedUser && (
+              <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.85, y: 30 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.8, y: 20 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative"
+                >
+
+                  {/* Close Button */}
+                  <button
+                    className="absolute top-3 right-3 text-gray-600 hover:text-red-600 text-2xl font-bold"
+                    onClick={() => setShowModal(false)}
+                  >
+                    ×
+                  </button>
+
+                  {/* Profile Image */}
+                  <div className="w-32 h-32 mx-auto rounded-full overflow-hidden bg-gray-200 shadow-md">
+                    {selectedUser.profileImage ? (
+                      <img
+                        src={selectedUser.profileImage}
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-pink-500 text-white text-3xl font-bold">
+                        {selectedUser.fullname?.charAt(0)}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* User Name */}
+                  <h2 className="text-xl font-bold text-center mt-4 text-gray-900">
+                    {selectedUser.fullname}
+                  </h2>
+
+                  {/* User Info */}
+                  <div className="mt-5 space-y-3 text-sm text-gray-700">
+
+                    <div className="flex justify-between">
+                      <strong>Email:</strong>
+                      <span>{selectedUser.email}</span>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <strong>Phone:</strong>
+                      <span>{selectedUser.phonenumber}</span>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <strong>Address:</strong>
+                      <span>{selectedUser.address || "No address provided"}</span>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <strong>Bio:</strong>
+                      <span>{selectedUser.bio || "No bio available"}</span>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <strong>Joined:</strong>
+                      <span>{new Date(selectedUser.createdAt).toLocaleDateString()}</span>
+                    </div>
+
+                  </div>
+
+                  {/* Close Button Bottom */}
+                  <div className="mt-6 text-center">
+                    <button
+                      onClick={() => setShowModal(false)}
+                      className="px-6 py-2 rounded-lg bg-pink-600 text-white hover:bg-pink-700 shadow-md"
+                    >
+                      Close
+                    </button>
+                  </div>
+
+                </motion.div>
+              </div>
+            )}
+
           </table>
         </div>
       </div>
