@@ -8,7 +8,7 @@ const ProfilePage = () => {
   const [profile, setProfile] = useState({
     fullName: '',
     email: '',
-    phonenumber: '',
+    phone: '',
     address: '',
     bio: '',
     profileImage: '',
@@ -49,9 +49,10 @@ const ProfilePage = () => {
       setProfile(prev => ({ ...prev, profileImage: URL.createObjectURL(file) }));
     }
   };
-
+  const [loading, setLoading] = useState(false);
   const handleSave = async () => {
     try {
+      setLoading(true);
       const formData = new FormData();
       formData.append("address", profile.address);
       formData.append("bio", profile.bio);
@@ -62,9 +63,19 @@ const ProfilePage = () => {
       });
 
       setIsEditing(false);
-      alert("Profile updated successfully!");
+      // alert("Profile updated successfully!");
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Updated successfully!",
+        showConfirmButton: false,
+        timer: 1500
+      });
     } catch (error) {
       console.error("Error updating profile", error);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -80,9 +91,46 @@ const ProfilePage = () => {
           </button>
         ) : (
           <div className="flex space-x-2">
-            <button onClick={handleSave} className="bg-pink-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-pink-600">
+            {/* <button onClick={handleSave} className="bg-pink-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-pink-600">
               <Save className="h-4 w-4" />
               <span>Save</span>
+            </button> */}
+            <button
+              type="submit"
+              disabled={loading}
+              onClick={handleSave}
+              className={`w-30 flex items-center justify-center gap-2 bg-pink-600 text-white py-2 rounded-lg font-semibold transition duration-300 ${loading ? "opacity-70 cursor-not-allowed" : "hover:bg-pink-700"
+                }`}
+            >
+              {loading && (
+                <>
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                  {/* <span>Save...</span> */}
+                  {/* <Save className="h-4 w-4" />
+                  <span>Save</span> */}
+                </>
+              )}
+              <Save className="h-4 w-4" />
+              <span>{loading ? "Saving" : "Save"}</span>
             </button>
             <button onClick={() => setIsEditing(false)} className="bg-gray-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-gray-600">
               <X className="h-4 w-4" />
@@ -141,7 +189,7 @@ const ProfilePage = () => {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
-          <p className="px-4 py-2 bg-gray-50 rounded-lg text-gray-800">{profile.phonenumber}</p>
+          <p className="px-4 py-2 bg-gray-50 rounded-lg text-gray-800">{profile.phone}</p>
         </div>
 
         {/* Editable fields */}
