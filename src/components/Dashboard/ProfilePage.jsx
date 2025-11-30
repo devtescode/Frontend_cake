@@ -80,7 +80,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="space-y-6 p-4">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Profile Settings</h1>
@@ -132,7 +132,7 @@ const ProfilePage = () => {
               <Save className="h-4 w-4" />
               <span>{loading ? "Saving" : "Save"}</span>
             </button>
-            <button onClick={() => setIsEditing(false)} className="bg-gray-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-gray-600">
+            <button onClick={() => setIsEditing(false)} className="bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-gray-500">
               <X className="h-4 w-4" />
               <span>Cancel</span>
             </button>
