@@ -236,7 +236,7 @@ const ProfilePage = () => {
 };
 
 const StatCard = ({ value, label, color }) => (
-  <div className={`bg-${color}-50 rounded-lg p-4 text-center`}>
+  <div className={`bg-${color}-100 rounded-lg p-4 text-center`}>
     <p className={`text-2xl font-bold text-${color}-600`}>{value}</p>
     <p className={`text-sm text-${color}-800`}>{label}</p>
   </div>
