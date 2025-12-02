@@ -221,7 +221,6 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {/* Account Stats */}
       <div className="mt-8 pt-8 border-t border-gray-200">
         <h3 className="text-lg font-semibold text-gray-800 mb-4">Account Statistics</h3>
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
@@ -234,6 +233,7 @@ const ProfilePage = () => {
     </div>
   );
 };
+
 
 const StatCard = ({ value, label, color }) => (
   <div className={`bg-${color}-100 rounded-lg p-4 text-center`}>
