@@ -27,6 +27,7 @@ import Viewscake from './Viewscake';
 import Orderdisplaypage from './Orderdisplaypage';
 import axios from 'axios';
 import { API_URLS } from '../../utils/apiConfig';
+import Notificationpage from './Notificationpage';
 // import Viewscake from './Viewscake';
 
 const Userdashboard = () => {
@@ -67,9 +68,9 @@ const Userdashboard = () => {
     { id: 'profile', label: 'Profile', icon: User },
     { id: 'cakes', label: 'Cakes', icon: ShoppingBag },
     { id: 'order', label: 'Order', icon: LucideListOrdered },
-    { id: 'payments', label: 'Payments', icon: CreditCard },
-    { id: 'favorites', label: 'Favorites', icon: Heart },
-    { id: 'reviews', label: 'Reviews', icon: MessageSquare },
+    // { id: 'payments', label: 'Payments', icon: CreditCard },
+    // { id: 'favorites', label: 'Favorites', icon: Heart },
+    // { id: 'reviews', label: 'Reviews', icon: MessageSquare },
     { id: 'notifications', label: 'Notifications', icon: Bell },
     { id: 'settings', label: 'Settings', icon: Settings }
   ];
@@ -127,6 +128,7 @@ const Userdashboard = () => {
       case 'cakes': return <Cakespage />;
       case 'viewscake': return <Viewscake />;
       case 'order': return <Orderdisplaypage />;
+      case 'notifications': return <Notificationpage />;
     }
   };
 
@@ -147,7 +149,7 @@ const Userdashboard = () => {
     }
 
     try {
-      await axios.post(API_URLS.logout , { userId });
+      await axios.post(API_URLS.logout, { userId });
       console.log("User logged out successfully");
     } catch (error) {
       console.error("Logout error:", error);

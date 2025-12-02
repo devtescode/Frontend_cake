@@ -14,6 +14,7 @@ import ProfilePage from './components/Dashboard/ProfilePage'
 import OverviewPage from './components/Dashboard/OverviewPage'
 import Orderdisplaypage from './components/Dashboard/Orderdisplaypage'
 import AdminprotectedRoute from './components/Adminprotectedpage/AdminprotectedRoute'
+import Notificationpage from './components/Dashboard/Notificationpage'
 
 function App() {
 
@@ -37,6 +38,7 @@ function App() {
           <Route path="cakes" element={<Cakespage />} />
           <Route path="viewscake/:id" element={<Viewscake />} />
           <Route path='order' element={<Orderdisplaypage/>}/>
+          <Route path='notifications' element={<Notificationpage/>}/>
         </Route>
 
         <Route path='/adlogin' element={<Adminlogin />} />
