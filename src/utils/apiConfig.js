@@ -28,4 +28,8 @@ export const API_URLS = {
     payments: `${baseURL}/payments/initialize`,
     userprofileupdate: (userId) => `${baseURL}/usercake/userprofileupdate/${userId}`,
     updateprofile: (userId) => `${baseURL}/usercake/updateprofile/${userId}`,
+    getusernotifications: (userId) => `${baseURL}/admin/getusernotifications/${userId}`,
+     markAsRead: (notificationId) => `${baseURL}/admin/markasread/${notificationId}`,
+    // http://localhost:4500/admin/markasread
+    
 };

@@ -150,7 +150,7 @@ const Userdashboard = () => {
 
     try {
       await axios.post(API_URLS.logout, { userId });
-      console.log("User logged out successfully");
+      // console.log("User logged out successfully");
     } catch (error) {
       console.error("Logout error:", error);
     } finally {

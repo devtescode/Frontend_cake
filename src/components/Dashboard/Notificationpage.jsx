@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaSpinner } from "react-icons/fa";
+import { API_URLS } from "../../utils/apiConfig";
 
 const Notificationpage = () => {
   const [notifications, setNotifications] = useState([]);
@@ -12,7 +13,8 @@ const Notificationpage = () => {
     try {
       setLoading(true); // start loading
       const res = await axios.get(
-        `http://localhost:4500/admin/getusernotifications/${userId}`
+        // `http://localhost:4500/admin/getusernotifications/${userId}`
+        API_URLS.getusernotifications(userId)
       );
       setNotifications(res.data);
     } catch (error) {
@@ -68,11 +70,15 @@ const Notificationpage = () => {
 
                 {!isRead && (
                   <button
-                    onClick={async () => {
-                      await axios.patch(
-                        `http://localhost:4500/admin/markasread/${notif._id}`,
-                        { userId }
-                      );
+                    // onClick={async () => {
+                    //   await axios.patch(
+                    //     `http://localhost:4500/admin/markasread/${notif._id}`,
+                    //     { userId }
+                    //   );
+                    //   fetchNotifications();
+                    // }}
+                     onClick={async () => {
+                      await axios.patch(API_URLS.markAsRead(notif._id), { userId });
                       fetchNotifications();
                     }}
                     className="mt-3 text-pink-500 font-medium hover:underline text-sm"
