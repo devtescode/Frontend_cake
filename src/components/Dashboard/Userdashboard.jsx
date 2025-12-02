@@ -45,6 +45,34 @@ const Userdashboard = () => {
   // }, [location]);
 
 
+  const [notifications, setNotifications] = useState([]);
+  const getuser = JSON.parse(localStorage.getItem("UserData"));
+  const userId = getuser?.id;
+  // console.log(userId);
+  
+
+  const fetchNotifications = async () => {
+    try {
+      // const res = await axios.get(API.getUserNotifications(userId));
+      // getusernotifications
+      const res = await axios.get(API_URLS.getusernotifications(userId));
+      setNotifications(res.data);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  // Count unread notifications
+  const unreadCount = notifications.filter(
+    (notif) => !notif.readBy.includes(userId)
+  ).length;
+
+
+
 
   // Check screen size
   useEffect(() => {
@@ -296,11 +324,14 @@ const Userdashboard = () => {
             <Menu className="h-5 w-5 text-gray-600" />
           </button>
 
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <Bell className="h-5 w-5 text-gray-600" />
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">2</span>
-            </div>
+         
+          <div className="flex items-center space-x-4 relative">
+            <Bell className="h-6 w-6 text-gray-600" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 right-3 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                {unreadCount}
+              </span>
+            )}
           </div>
         </div>
 
