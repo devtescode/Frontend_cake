@@ -221,6 +221,7 @@ const ProfilePage = () => {
         </div>
       </div>
 
+
       <div className="mt-8 pt-8 border-t border-gray-200">
         <h3 className="text-lg font-semibold text-gray-800 mb-4">Account Statistics</h3>
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
