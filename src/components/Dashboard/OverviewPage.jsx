@@ -60,6 +60,15 @@ const OverviewPage = () => {
     fetchDashboardData();
   }, [navigate]);
 
+    // const [user, setUser] = useState(null);
+  
+    // useEffect(() => {
+    //   const storedUser = localStorage.getItem("UserData");
+    //   if (storedUser) {
+    //     setUser(JSON.parse(storedUser));
+    //   }
+    // }, []);
+
   if (loading) return <LoadingSkeleton />;
 
   // UPDATED STATS TO MATCH BACKEND
@@ -73,8 +82,8 @@ const OverviewPage = () => {
 
     {
       title: "Paid Amount",
-      value: `₦${userInfo.totalSpent.toLocaleString()}`,
-      icon: "₦",
+      value: `£${userInfo.totalSpent.toLocaleString()}`,
+      icon: "£",
       color: "from-emerald-500 to-green-400"
     },
 
@@ -87,8 +96,8 @@ const OverviewPage = () => {
 
     {
       title: "Pending Amount",
-      value: `₦${userInfo.pendingAmount.toLocaleString()}`,
-      icon: "₦",
+      value: `£${userInfo.pendingAmount.toLocaleString()}`,
+      icon: "£",
       color: "from-yellow-500 to-orange-400"
     },
   ];
@@ -96,10 +105,10 @@ const OverviewPage = () => {
   return (
     <div className="space-y-5 px-0 md:px-0 py-2">
 
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
-        <p className="text-gray-600 mt-1">Welcome back! Here's a quick look at your activity.</p>
-      </div>
+      {/* <div>
+        <h1 className="text-3xl font-bold text-gray-900">Welcome back!</h1>
+        <p className="text-gray-600 mt-1"> {user?.fullname || "Guest User"}</p>
+      </div> */}
 
       {/* STATS GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
