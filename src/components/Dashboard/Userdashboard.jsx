@@ -321,7 +321,11 @@ const Userdashboard = () => {
             onClick={toggleSidebar}
             className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
-            <Menu className="h-5 w-5 text-gray-600" />
+            {/* <Menu className="h-5 w-5 text-gray-600" /> */}
+            <Menu className="h-5 w-5 text-gray-600 block lg:hidden" />
+
+            {/* <Menu className="h-5 w-5 text-gray-600 block sm:hidden" /> */}
+
           </button>
 
          
