@@ -64,38 +64,38 @@ const OverviewPage = () => {
 
   // UPDATED STATS TO MATCH BACKEND
   const stats = [
-    { 
-      title: "Paid Quantity", 
-      value: userInfo.totalOrders, 
-      icon: <ShoppingBag />, 
-      color: "from-pink-500 to-rose-400" 
+    {
+      title: "Paid Quantity",
+      value: userInfo.totalOrders,
+      icon: <ShoppingBag />,
+      color: "from-pink-500 to-rose-400"
     },
 
-    { 
-      title: "Paid Amount", 
-      value: `₦${userInfo.totalSpent.toLocaleString()}`, 
-      icon: "₦", 
-      color: "from-emerald-500 to-green-400" 
+    {
+      title: "Paid Amount",
+      value: `₦${userInfo.totalSpent.toLocaleString()}`,
+      icon: "₦",
+      color: "from-emerald-500 to-green-400"
     },
 
-    { 
-      title: "Pending Quantity", 
-      value: userInfo.totalQuantity, 
-      icon: <Package />, 
-      color: "from-blue-500 to-indigo-400" 
+    {
+      title: "Pending Quantity",
+      value: userInfo.totalQuantity,
+      icon: <Package />,
+      color: "from-blue-500 to-indigo-400"
     },
 
-    { 
-      title: "Pending Amount", 
-      value: `₦${userInfo.pendingAmount.toLocaleString()}`, 
-      icon: "₦", 
-      color: "from-yellow-500 to-orange-400" 
+    {
+      title: "Pending Amount",
+      value: `₦${userInfo.pendingAmount.toLocaleString()}`,
+      icon: "₦",
+      color: "from-yellow-500 to-orange-400"
     },
   ];
 
   return (
     <div className="space-y-5 px-0 md:px-0 py-2">
-      
+
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
         <p className="text-gray-600 mt-1">Welcome back! Here's a quick look at your activity.</p>
@@ -194,18 +194,21 @@ const OrderRow = ({ order }) => (
     </div>
 
     <span
-      className={`px-3 py-1 rounded-full text-xs font-medium ${
-        order.status.toLowerCase() === "success" || order.status.toLowerCase() === "delivered"
+      className={`self-start sm:self-auto w-fit px-3 py-1 rounded-full text-xs font-medium
+    ${order.status.toLowerCase() === "success" ||
+          order.status.toLowerCase() === "delivered"
           ? "bg-green-100 text-green-800"
           : order.status.toLowerCase() === "processing"
-          ? "bg-blue-100 text-blue-800"
-          : order.status.toLowerCase() === "pending"
-          ? "bg-yellow-100 text-yellow-800"
-          : "bg-red-100 text-red-800"
-      }`}
+            ? "bg-blue-100 text-blue-800"
+            : order.status.toLowerCase() === "pending"
+              ? "bg-yellow-100 text-yellow-800"
+              : "bg-red-100 text-red-800"
+        }
+  `}
     >
       {order.status}
     </span>
+
   </div>
 );
 
