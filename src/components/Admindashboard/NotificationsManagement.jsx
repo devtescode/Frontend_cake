@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Modal from "../Modal";
 import axios from "axios";
 import { ClosedCaption, ColumnsSettings, EyeClosed } from "lucide-react";
+import { API_URLS } from "../../utils/apiConfig";
 
 const NotificationsManagement = () => {
   const [notifications, setNotifications] = useState([]);
@@ -20,7 +21,7 @@ const NotificationsManagement = () => {
 
   // ✅ Fetch notifications from backend
   const fetchNotifications = async () => {
-    const res = await axios.get("http://localhost:4500/admin/getnotifications");
+    const res = await axios.get(API_URLS.getnotifications);
     setNotifications(res.data);
     console.log(res, "responsive");
 
@@ -28,7 +29,7 @@ const NotificationsManagement = () => {
 
   // ✅ Fetch all users for selected users option
   const fetchUsers = async () => {
-    const res = await axios.get("http://localhost:4500/admin/getAllUsers");
+    const res = await axios.get(API_URLS.getAllUsers);
     setUsersList(res.data);
   };
 
@@ -42,7 +43,7 @@ const NotificationsManagement = () => {
     e.preventDefault();
 
     try {
-      await axios.post("http://localhost:4500/admin/sendnotification", {
+      await axios.post(API_URLS.sendnotification, {
         title: newNotification.title,
         message: newNotification.message,
         targetAudience: newNotification.targetAudience,
@@ -80,7 +81,7 @@ const deleteNotification = (id) => {
   }).then(async (result) => {
     if (result.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:4500/admin/deletenotification/${id}`);
+        await axios.delete(API_URLS.deletenotification(id));
         fetchNotifications();
 
         Swal.fire({

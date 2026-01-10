@@ -30,6 +30,10 @@ export const API_URLS = {
     updateprofile: (userId) => `${baseURL}/usercake/updateprofile/${userId}`,
     getusernotifications: (userId) => `${baseURL}/admin/getusernotifications/${userId}`,
      markAsRead: (notificationId) => `${baseURL}/admin/markasread/${notificationId}`,
+     getnotifications: `${baseURL}/admin/getnotifications`,
+     getAllUsers: `${baseURL}/admin/getAllUsers`,
+     sendnotification: `${baseURL}/admin/sendnotification`,
+     deletenotification: (id) => `${baseURL}/admin/deletenotification/${id}`,
     // http://localhost:4500/admin/markasread
     
 };
