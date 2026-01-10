@@ -49,7 +49,7 @@ const Userdashboard = () => {
   const getuser = JSON.parse(localStorage.getItem("UserData"));
   const userId = getuser?.id;
   // console.log(userId);
-  
+
 
   const fetchNotifications = async () => {
     try {
@@ -200,7 +200,7 @@ const Userdashboard = () => {
 
   if (!isScreenChecked) return null;
   return (
-    <div className="min-h-screen bg-gray-50 flex relative">
+    <div className="min-h-screen bg-gray-50 flex relative pt-16">
       <AnimatePresence>
         {isMobile && isSidebarOpen && (
           <motion.div
@@ -262,6 +262,7 @@ const Userdashboard = () => {
         </div>
 
         <nav className="p-2">
+          
           <ul className="space-y-1">
             {sidebarItems.map(item => {
               const Icon = item.icon;
@@ -315,49 +316,43 @@ const Userdashboard = () => {
         </div>
       </motion.div>
 
-      <div className="flex-1 flex flex-col min-h-screen">
-        <div className="bg-white shadow-sm border-b border-gray-200 p-4 flex items-center justify-between">
-          <button
-            onClick={toggleSidebar}
-            className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-          >
-            {/* <Menu className="h-5 w-5 text-gray-600" /> */}
-            <Menu className="h-5 w-5 text-gray-600 block lg:hidden" />
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm border-b border-gray-200 h-16 flex items-center justify-between px-4">
+        <button
+          onClick={toggleSidebar}
+          className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+        >
+          <Menu className="h-5 w-5 text-gray-600 block lg:hidden" />
+        </button>
 
-            {/* <Menu className="h-5 w-5 text-gray-600 block sm:hidden" /> */}
-
-          </button>
-
-         
-          <div className="flex items-center space-x-4 relative">
-            <Bell className="h-6 w-6 text-gray-600" />
-            {unreadCount > 0 && (
-              <span className="absolute -top-1 right-3 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                {unreadCount}
-              </span>
-            )}
-          </div>
-        </div>
-
-        
-        <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto">
-          {location.pathname.includes("/userdashboard/viewscake") ? (
-            <Outlet />
-          ) : (
-            <motion.div
-              key={activeTab}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              {renderPage()}
-            </motion.div>
+        <div className="relative">
+          <Bell className="h-6 w-6 text-gray-600" />
+          {unreadCount > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+              {unreadCount}
+            </span>
           )}
         </div>
-
       </div>
+
+
+      <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto">
+        {location.pathname.includes("/userdashboard/viewscake") ? (
+          <Outlet />
+        ) : (
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            {renderPage()}
+          </motion.div>
+        )}
+      </div>
+
     </div>
+    // </div >
   );
 };
 
