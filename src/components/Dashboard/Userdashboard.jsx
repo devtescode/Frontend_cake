@@ -124,16 +124,16 @@ const Userdashboard = () => {
       x: 0,
       transition: {
         type: "spring",
-        stiffness: 300,
-        damping: 30
+        stiffness: 500,
+        damping: 50
       }
     },
     closed: {
       x: "-100%",
       transition: {
         type: "spring",
-        stiffness: 300,
-        damping: 30
+        stiffness: 500,
+        damping: 50
       }
     }
   };
@@ -141,11 +141,11 @@ const Userdashboard = () => {
   const overlayVariants = {
     open: {
       opacity: 1,
-      transition: { duration: 0.3 }
+      transition: { duration: 2.2 }
     },
     closed: {
       opacity: 0,
-      transition: { duration: 0.3 }
+      transition: { duration: 2.2 }
     }
   };
 
@@ -335,17 +335,7 @@ const Userdashboard = () => {
           </div>
         </div>
 
-        {/* <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto">
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            {renderPage()}
-          </motion.div>
-        </div> */}
+        
         <div className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto">
           {location.pathname.includes("/userdashboard/viewscake") ? (
             <Outlet />
