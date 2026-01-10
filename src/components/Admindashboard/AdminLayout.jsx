@@ -29,7 +29,7 @@ const AdminLayout = () => {
         { title: "Total Users", value: stats.totalUsers, icon: "👥", color: "blue" },
         { title: "Orders", value: stats.totalCakes, icon: "🧁", color: "pink" },
         { title: "Quantity", value: stats.totalQuantity, icon: "🛒", color: "green" },
-        { title: "Revenue", value: `₦${stats.totalRevenue?.toLocaleString()}`, icon: "💰", color: "purple" },
+        { title: "Revenue", value: `£${stats.totalRevenue?.toLocaleString()}`, icon: "💰", color: "purple" },
       ]
     : Array(4).fill({ title: "", value: "", icon: "", color: "" });
 
