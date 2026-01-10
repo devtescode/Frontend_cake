@@ -48,7 +48,7 @@ const RecentOrders = ({ orders = [] }) => {
               </p>
             </div>
             <span className="font-semibold text-gray-900 bg-gray-100 px-3 py-1 rounded-lg">
-              ₦{(order.price * order.quantity).toLocaleString()}
+              £{(order.price * order.quantity).toLocaleString()}
             </span>
           </motion.li>
         ))}
@@ -102,7 +102,7 @@ const RecentOrders = ({ orders = [] }) => {
                       </p>
                     </div>
                     <span className="font-semibold text-gray-900 bg-gray-100 px-3 py-1 rounded-lg">
-                      ₦{(order.price * order.quantity).toLocaleString()}
+                      £{(order.price * order.quantity).toLocaleString()}
                     </span>
                   </li>
                 ))}
