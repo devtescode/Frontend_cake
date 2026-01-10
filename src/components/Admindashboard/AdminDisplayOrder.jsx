@@ -250,7 +250,7 @@ const AdminDisplayOrder = () => {
                                     <div>
                                         <p className="font-semibold text-gray-800">{order.name}</p>
                                         <p className="text-gray-600 text-sm">
-                                            ₦{order.price.toLocaleString()}
+                                            £{order.price.toLocaleString()}
                                         </p>
                                         <p className="text-xs text-gray-500">
                                             Ordered: {new Date(order.createdAt).toLocaleDateString()}

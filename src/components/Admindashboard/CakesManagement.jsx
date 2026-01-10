@@ -179,7 +179,7 @@ const CakesManagement = () => {
                           </div>
                         </td>
                         <td className="px-1 sm:px-6 py-2 sm:py-0 whitespace-nowrap text-sm font-medium text-gray-900">
-                          ₦{Number(cake.price).toLocaleString()}
+                          £{Number(cake.price).toLocaleString()}
                         </td>
                         <td className="px-1 sm:px-6 py-2 sm:py-4 whitespace-nowrap">
                           <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-pink-100 text-pink-800">
