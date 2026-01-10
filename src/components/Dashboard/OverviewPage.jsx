@@ -194,7 +194,7 @@ const OrderRow = ({ order }) => (
     </div>
 
     <span
-      className={`self-start sm:self-auto w-fit px-3 py-1 rounded-full text-xs font-medium
+      className={`self-end sm:self-auto w-fit px-3 py-1 rounded-full text-xs font-medium 
     ${order.status.toLowerCase() === "success" ||
           order.status.toLowerCase() === "delivered"
           ? "bg-green-100 text-green-800"
